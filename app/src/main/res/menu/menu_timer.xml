@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/menu_ic_create_routine"
-        android:icon="@drawable/ic_create_routine"
+        android:icon="@drawable/ic_mode_edit_white_48dp"
         android:title="@string/menu_ic_create_routine"
         app:showAsAction="ifRoom|withText"/>
+
+    <item
+        android:id="@+id/menu_ic_settings"
+        android:icon="@drawable/ic_settings_white_48dp"
+        android:title="@string/menu_ic_settings"
+        app:showAsAction="ifRoom|withText"/>
+
 </menu>

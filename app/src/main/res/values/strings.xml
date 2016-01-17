@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">LiteWorkoutTimer</string>
     <string name="menu_ic_create_routine">Create routine</string>
+    <string name="menu_ic_settings">Settings</string>
 </resources>
