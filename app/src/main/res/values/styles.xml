@@ -6,9 +6,22 @@
     <style name="MaterialTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/LightBlue_500</item>
+        <item name="colorPrimaryDark">@color/LightBlue_700</item>
+        <item name="colorAccent">@color/IndigoAccent_200</item>
+        <item name="android:textColorPrimary">@color/Black_0.87</item>
+        <item name="android:textColorSecondary">@color/Black_0.54</item>
+        <item name="android:textColorHint">@color/Black_0.38</item>
+        <item name="android:divider">@color/Black_0.12</item>
+    </style>
+
+    <style name="KeypadLayoutStyle" parent="MaterialTheme.Base">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorKeypadButtonText</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">32sp</item>
     </style>
 
 </resources>

@@ -1,6 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/numeric_keypad"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
 
-</GridLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/button_1"
+            style="@style/KeypadLayoutStyle"
+            android:text="@string/digit1"/>
+
+        <Button
+            android:id="@+id/button_2"
+            style="@style/KeypadLayoutStyle"
+            android:text="@string/digit2"/>
+
+        <Button
+            android:id="@+id/button_3"
+            style="@style/KeypadLayoutStyle"
+            android:text="@string/digit3"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/button_4"
+            style="@style/KeypadLayoutStyle"
+            android:text="@string/digit4"/>
+
+        <Button
+            android:id="@+id/button_5"
+            style="@style/KeypadLayoutStyle"
+            android:text="@string/digit5"/>
+
+        <Button
+            android:id="@+id/button_6"
+            style="@style/KeypadLayoutStyle"
+            android:text="@string/digit6"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/button_7"
+            style="@style/KeypadLayoutStyle"
+            android:text="@string/digit7"/>
+
+        <Button
+            android:id="@+id/button_8"
+            style="@style/KeypadLayoutStyle"
+            android:text="@string/digit8"/>
+
+        <Button
+            android:id="@+id/button_9"
+            style="@style/KeypadLayoutStyle"
+            android:text="@string/digit9"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/button_empty"
+            style="@style/KeypadLayoutStyle"/>
+
+        <Button
+            android:id="@+id/button_0"
+            style="@style/KeypadLayoutStyle"
+            android:text="@string/digit0"/>
+
+        <Button
+            android:id="@+id/button_del"
+            style="@style/KeypadLayoutStyle"
+            android:text="@string/digit3"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

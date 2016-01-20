@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#03A9F4</color>
-    <color name="colorPrimaryDark">#0288D1</color>
-    <color name="colorPrimaryLight">#B3E5FC</color>
-    <color name="colorAccent">#536DFE</color>
-    <color name="colorPrimaryText">#212121</color>
-    <color name="colorSecondaryText">#727272</color>
-    <color name="colorIcons">#FFFFFF</color>
-    <color name="colorDivider">#B6B6B6</color>
+    <color name="LightBlue_500">#03A9F4</color><!-- AppBar -->
+    <color name="LightBlue_700">#0288D1</color><!-- StatusBar-->
+    <color name="LightBlue_100">#B3E5FC</color><!-- LightBlue_500 -->
+    <color name="IndigoAccent_200">#536DFE</color><!-- Accent -->
+    <color name="Black_0.87">#212121</color><!-- PrimaryText -->
+    <color name="Black_0.54">#737373</color><!-- SecondaryText/Icons -->
+    <color name="Black_0.38">#9b9b9b</color><!-- Disabled/Hint -->
+    <color name="Black_0.12">#dbdbdb</color><!-- Dividers -->
+
+    // Keypad colors
+    <color name="colorKeypadButtonText">#03A9F4</color><!-- LightBlue_500 -->
 </resources>
