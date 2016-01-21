@@ -2,6 +2,8 @@
     <string name="app_name">LiteWorkoutTimer</string>
     <string name="menu_ic_create_routine">Create routine</string>
     <string name="menu_ic_settings">Settings</string>
+
+    // Keypad
     <string name="digit1">1</string>
     <string name="digit2">2</string>
     <string name="digit3">3</string>
@@ -13,4 +15,12 @@
     <string name="digit9">9</string>
     <string name="digit0">0</string>
     <string name="delete">del</string>
+    <string name="delete_description">delete</string>
+
+    // Timer buttons
+    <string name="start_button">START</string>
+    <string name="rest_button">REST</string>
+    <string name="pause_button">PAUSE</string>
+    <string name="reset_button">RESET</string>
+
 </resources>

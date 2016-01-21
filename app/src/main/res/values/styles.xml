@@ -19,9 +19,9 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/colorKeypadButtonText</item>
-        <item name="android:background">@android:color/transparent</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textSize">32sp</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:layout_margin">@dimen/keypad_button_margins</item>
+        <item name="android:textSize">@dimen/keypad_button_text_size</item>
     </style>
 
 </resources>

@@ -6,4 +6,13 @@
     <dimen name="toolbar_title_inset_left">0dp</dimen>
     <dimen name="toolbar_title_inset_start">72dp</dimen>
 
+    // Keypad
+    <dimen name="keypad_button_margins">5dp</dimen>
+    <dimen name="keypad_button_text_size">32sp</dimen>
+
+    //Timer buttons
+    <dimen name="timer_buttons_padding_top">5dp</dimen>
+    <dimen name="timer_buttons_layout_margin">0dp</dimen>
+    <dimen name="timer_button_text_size">16sp</dimen>
+
 </resources>

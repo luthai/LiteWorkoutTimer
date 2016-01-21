@@ -2,7 +2,7 @@
 <resources>
     <color name="LightBlue_500">#03A9F4</color><!-- AppBar -->
     <color name="LightBlue_700">#0288D1</color><!-- StatusBar-->
-    <color name="LightBlue_100">#B3E5FC</color><!-- LightBlue_500 -->
+    <color name="LightBlue_100">#B3E5FC</color>
     <color name="IndigoAccent_200">#536DFE</color><!-- Accent -->
     <color name="Black_0.87">#212121</color><!-- PrimaryText -->
     <color name="Black_0.54">#737373</color><!-- SecondaryText/Icons -->
@@ -11,4 +11,8 @@
 
     // Keypad colors
     <color name="colorKeypadButtonText">#03A9F4</color><!-- LightBlue_500 -->
+
+    // Timer buttons
+    <color name="White">#ffffff</color><!-- TextButtonColor -->
+    <color name="Green_500">#4CAF50</color><!-- StartButton -->
 </resources>
