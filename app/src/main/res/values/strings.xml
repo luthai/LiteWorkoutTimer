@@ -1,3 +1,6 @@
+<!-- Copyright (c) [2016] [Luan Thanh Thai] -->
+<!-- See the file LICENSE.txt for copying permission -->
+
 <resources>
     <string name="app_name">LiteWorkoutTimer</string>
     <string name="menu_ic_create_routine">Create routine</string>

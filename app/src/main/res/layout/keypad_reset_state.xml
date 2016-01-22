@@ -1,36 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) [2016] [Luan Thanh Thai] -->
+<!-- See the file LICENSE.txt for copying permission -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="wrap_content"
+              android:layout_gravity="bottom|center">
 
     <include
         android:id="@+id/numeric_keypad"
         layout="@layout/keypad"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
         android:paddingTop="@dimen/timer_buttons_padding_top"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        style="?android:attr/buttonBarStyle">
 
         <Button
             android:id="@+id/button_rest"
-            android:layout_margin="@dimen/timer_buttons_layout_margin"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/LightBlue_500"
             android:text="@string/rest_button"
             android:textColor="@color/White"
             android:textSize="@dimen/timer_button_text_size"
-            style="@style/KeypadLayoutStyle"/>
+            style="?android:attr/borderlessButtonStyle"/>
 
         <Button
             android:id="@+id/button_start"
-            android:layout_margin="@dimen/timer_buttons_layout_margin"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/Green_500"
             android:text="@string/start_button"
             android:textColor="@color/White"
             android:textSize="@dimen/timer_button_text_size"
-            style="@style/KeypadLayoutStyle"/>
+            style="?android:attr/borderlessButtonStyle"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:paddingTop="@dimen/timer_buttons_padding_top">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_marginLeft="4dip"
+            android:layout_marginRight="4dip"
+            android:background="?android:attr/dividerVertical"
+            android:layout_alignParentTop="true"/>
+        <View
+            android:id="@+id/ViewColorPickerHelper"
+            android:layout_width="1dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dip"
+            android:layout_marginTop="4dip"
+            android:background="?android:attr/dividerVertical"
+            android:layout_centerHorizontal="true"/>
+        <Button
+            android:id="@+id/BtnColorPickerCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/ViewColorPickerHelper"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="Rest"
+            android:textColor="@color/LightBlue_500"
+            android:layout_alignParentBottom="true"/>
+        <Button
+            android:id="@+id/BtnColorPickerOk"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="START"
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/LightBlue_500"
+            android:layout_toRightOf="@id/ViewColorPickerHelper"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="?android:attr/dividerVertical" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  style="?android:buttonBarStyle">
+
+        <Button
+            android:id="@+id/add"
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="REST"
+            android:textColor="@color/Black_0.54"
+            style="?android:attr/borderlessButtonStyle"
+            />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="START"
+            android:textColor="@color/Black_0.54"
+            style="?android:attr/borderlessButtonStyle"
+            />
 
     </LinearLayout>
 
