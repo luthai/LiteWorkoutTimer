@@ -6,7 +6,8 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_gravity="bottom|center">
+              android:layout_gravity="bottom|center"
+              android:background="@color/Black_0.12">
 
     <include
         android:id="@+id/numeric_keypad"
@@ -56,13 +57,16 @@
             android:background="?android:attr/selectableItemBackground"
             android:textSize="@dimen/timer_button_text_size"
             android:textColor="@color/LightBlue_500"/>
+
     </RelativeLayout>
     -->
 
+    <!-- Use these buttons for now -->
+    <!-- Change to color button with selectableItemBackground for ripple effect -->
+    <!-- Ripple requires API level 21 -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:paddingTop="@dimen/timer_buttons_padding_top"
+        android:layout_height="@dimen/timer_button_height"
         android:orientation="horizontal"
         style="?android:attr/buttonBarStyle">
 
@@ -87,7 +91,5 @@
             android:textSize="@dimen/timer_button_text_size"/>
 
     </LinearLayout>
-
-
 
 </LinearLayout>

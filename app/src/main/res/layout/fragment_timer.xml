@@ -2,7 +2,7 @@
 <!-- Copyright (c) [2016] [Luan Thanh Thai] -->
 <!-- See the file LICENSE.txt for copying permission -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/fragment_timer_view"
               android:orientation="vertical"
               android:layout_width="match_parent"
@@ -13,10 +13,20 @@
         layout="@layout/toolbar"/>
 
     <TextView
-        android:text="Hello World"
-        android:layout_width="wrap_content"
+        android:id="@+id/text_view_ex"
+        android:text="00:13"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30dp"
+        android:layout_below="@id/toolbar"
+        android:layout_margin="16dp"
+        android:textSize="60sp"
         android:textColor="@color/Black_0.87"/>
 
-</LinearLayout>
+    <include
+        android:id="@+id/keypad_reset_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/keypad_reset_state"/>
+
+</RelativeLayout>

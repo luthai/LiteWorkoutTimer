@@ -3,6 +3,8 @@
 <!-- See the file LICENSE.txt for copying permission -->
 
 <resources>
+
+    // App colors
     <color name="LightBlue_500">#03A9F4</color><!-- AppBar -->
     <color name="LightBlue_700">#0288D1</color><!-- StatusBar-->
     <color name="LightBlue_100">#B3E5FC</color>
