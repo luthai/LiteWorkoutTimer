@@ -12,6 +12,53 @@
         android:id="@+id/numeric_keypad"
         layout="@layout/keypad"/>
 
+    <!-- Alternative Start & Rest button look -->
+    <!-- Transparent background with horizontal and vertical dividers -->
+    <!-- TextColor LightBlue_500 -->
+    <!--
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/Black_0.12"/>
+
+        <View
+            android:id="@+id/vertical_line"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/Black_0.12"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:id="@+id/buttonRest"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/vertical_line"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="@string/rest_button"
+            android:textSize="@dimen/timer_button_text_size"
+            android:textColor="@color/LightBlue_500"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/vertical_line"
+            android:text="@string/start_button"
+            android:background="?android:attr/selectableItemBackground"
+            android:textSize="@dimen/timer_button_text_size"
+            android:textColor="@color/LightBlue_500"/>
+    </RelativeLayout>
+    -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -27,8 +74,7 @@
             android:background="@color/LightBlue_500"
             android:text="@string/rest_button"
             android:textColor="@color/White"
-            android:textSize="@dimen/timer_button_text_size"
-            style="?android:attr/borderlessButtonStyle"/>
+            android:textSize="@dimen/timer_button_text_size"/>
 
         <Button
             android:id="@+id/button_start"
@@ -38,88 +84,10 @@
             android:background="@color/Green_500"
             android:text="@string/start_button"
             android:textColor="@color/White"
-            android:textSize="@dimen/timer_button_text_size"
-            style="?android:attr/borderlessButtonStyle"/>
+            android:textSize="@dimen/timer_button_text_size"/>
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_alignParentBottom="true"
-        android:paddingTop="@dimen/timer_buttons_padding_top">
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:layout_marginLeft="4dip"
-            android:layout_marginRight="4dip"
-            android:background="?android:attr/dividerVertical"
-            android:layout_alignParentTop="true"/>
-        <View
-            android:id="@+id/ViewColorPickerHelper"
-            android:layout_width="1dip"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="4dip"
-            android:layout_marginTop="4dip"
-            android:background="?android:attr/dividerVertical"
-            android:layout_centerHorizontal="true"/>
-        <Button
-            android:id="@+id/BtnColorPickerCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@id/ViewColorPickerHelper"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="Rest"
-            android:textColor="@color/LightBlue_500"
-            android:layout_alignParentBottom="true"/>
-        <Button
-            android:id="@+id/BtnColorPickerOk"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="START"
-            android:layout_alignParentBottom="true"
-            android:textColor="@color/LightBlue_500"
-            android:layout_toRightOf="@id/ViewColorPickerHelper"/>
-    </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:background="?android:attr/dividerVertical" />
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  style="?android:buttonBarStyle">
-
-        <Button
-            android:id="@+id/add"
-            android:layout_weight="1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="REST"
-            android:textColor="@color/Black_0.54"
-            style="?android:attr/borderlessButtonStyle"
-            />
-
-        <Button
-            android:id="@+id/cancel"
-            android:layout_weight="1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="START"
-            android:textColor="@color/Black_0.54"
-            style="?android:attr/borderlessButtonStyle"
-            />
-
-    </LinearLayout>
 
 </LinearLayout>
