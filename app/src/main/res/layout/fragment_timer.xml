@@ -13,14 +13,11 @@
         layout="@layout/toolbar"/>
 
     <TextView
-        android:id="@+id/text_view_ex"
-        android:text="00:13"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
-        android:layout_margin="16dp"
-        android:textSize="60sp"
-        android:textColor="@color/Black_0.87"/>
+        android:layout_marginTop="100dp"
+        style="?android:listSeparatorTextViewStyle"/>
 
     <include
         android:id="@+id/keypad_reset_state"
