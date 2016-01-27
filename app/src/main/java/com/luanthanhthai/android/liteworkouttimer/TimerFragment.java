@@ -3,6 +3,8 @@ package com.luanthanhthai.android.liteworkouttimer;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -19,6 +21,15 @@ import android.widget.Toast;
  * See the file LICENSE.txt for copying permission
  */
 public class TimerFragment extends Fragment {
+
+    final static String TAG_RESET_STATE = "fragment_reset_state";
+    final static String TAG_RUN_STATE = "fragment_run_state";
+    final static String KEY_MSG_RESET_STATE = "fragment_reset_key_msg";
+    final static String KEY_MSG_RUN_STATE = "fragment_run_key_msg";
+
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
+    TimerResetStateFragment resetStateFragment;
 
     private Toolbar mToolbar;
 
@@ -40,6 +51,14 @@ public class TimerFragment extends Fragment {
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(mToolbar);
+
+        // Add resetStateFragment to TimerFragment
+        fragmentManager = getFragmentManager();
+        resetStateFragment = new TimerResetStateFragment();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction
+                            .add(R.id.timer_keypad_container, resetStateFragment, TAG_RESET_STATE)
+                            .commit();
 
         // For backwards compatibility set this
         // near the end
@@ -66,13 +85,11 @@ public class TimerFragment extends Fragment {
                 text = "Create routine";
                 toast = Toast.makeText(context, text, duration);
                 toast.show();
-
                 return true;
             case R.id.menu_ic_settings:
                 text = "Settings";
                 toast = Toast.makeText(context, text, duration);
                 toast.show();
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

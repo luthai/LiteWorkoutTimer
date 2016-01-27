@@ -20,4 +20,6 @@
     // Timer buttons
     <color name="White">#ffffff</color><!-- TextButtonColor -->
     <color name="Green_500">#4CAF50</color><!-- StartButton -->
+    <color name="Amber_600">#FFB300</color><!-- PauseButton -->
+
 </resources>

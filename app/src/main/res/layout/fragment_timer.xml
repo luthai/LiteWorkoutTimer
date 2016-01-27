@@ -12,18 +12,18 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar"/>
 
-    <TextView
+    <EditText
+        android:id="@+id/test_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
-        android:layout_marginTop="100dp"
-        style="?android:listSeparatorTextViewStyle"/>
+        android:layout_marginTop="100dp"/>
 
-    <include
-        android:id="@+id/keypad_reset_state"
+    <FrameLayout
+        android:id="@+id/timer_keypad_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        layout="@layout/keypad_reset_state"/>
+        android:layout_alignParentBottom="true">
+    </FrameLayout>
 
 </RelativeLayout>
