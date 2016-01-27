@@ -22,15 +22,6 @@ import android.widget.Toast;
  */
 public class TimerFragment extends Fragment {
 
-    final static String TAG_RESET_STATE = "fragment_reset_state";
-    final static String TAG_RUN_STATE = "fragment_run_state";
-    final static String KEY_MSG_RESET_STATE = "fragment_reset_key_msg";
-    final static String KEY_MSG_RUN_STATE = "fragment_run_key_msg";
-
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-    TimerResetStateFragment resetStateFragment;
-
     private Toolbar mToolbar;
 
     public static TimerFragment newInstance() {
@@ -51,14 +42,6 @@ public class TimerFragment extends Fragment {
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(mToolbar);
-
-        // Add resetStateFragment to TimerFragment
-        fragmentManager = getFragmentManager();
-        resetStateFragment = new TimerResetStateFragment();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction
-                            .add(R.id.timer_keypad_container, resetStateFragment, TAG_RESET_STATE)
-                            .commit();
 
         // For backwards compatibility set this
         // near the end
