@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/colorPrimaryDark"
+    android:background="?attr/colorPrimary"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:elevation="@dimen/toolbar_elevation"
     app:contentInsetLeft="@dimen/toolbar_title_inset_left"

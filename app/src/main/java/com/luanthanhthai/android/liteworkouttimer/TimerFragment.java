@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 /**
@@ -23,6 +24,9 @@ import android.widget.Toast;
 public class TimerFragment extends Fragment {
 
     private Toolbar mToolbar;
+    private Button mStartButton;
+    private Button mRestButton;
+    private boolean isRunning;
 
     public static TimerFragment newInstance() {
         return new TimerFragment();
@@ -37,17 +41,48 @@ public class TimerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_timer, container, false);
+        View v = inflater.inflate(R.layout.fragment_timer, container, false);
 
-        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) v.findViewById(R.id.toolbar);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(mToolbar);
+
+        // Check if timer is running
+        isRunning = false;
+
+        mStartButton = (Button) v.findViewById(R.id.button_start);
+        mStartButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (isRunning) {
+                    mStartButton.setText("START");
+                    mStartButton.setBackgroundColor(getResources().getColor(R.color.Green_500));
+                    isRunning = false;
+                } else {
+                    mStartButton.setText("PAUSE");
+                    mStartButton.setBackgroundColor(getResources().getColor(R.color.Amber_600));
+                    isRunning = true;
+                }
+            }
+        });
+
+        mRestButton = (Button) v.findViewById(R.id.button_rest);
+        mRestButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (isRunning) {
+                    mRestButton.setText("REST");
+                    isRunning = false;
+                } else {
+                    mRestButton.setText("RESET");
+                    isRunning = true;
+                }
+            }
+        });
 
         // For backwards compatibility set this
         // near the end
         setHasOptionsMenu(true);
 
-        return view;
+        return v;
     }
 
     @Override

@@ -13,17 +13,17 @@
         layout="@layout/toolbar"/>
 
     <EditText
-        android:id="@+id/test_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
+    android:id="@+id/test_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/toolbar"
         android:layout_marginTop="100dp"/>
 
-    <FrameLayout
-        android:id="@+id/timer_keypad_container"
+    <include
+        android:id="@+id/timer_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-    </FrameLayout>
+        android:layout_alignParentBottom="true"
+        layout="@layout/timer_buttons"/>
 
 </RelativeLayout>
