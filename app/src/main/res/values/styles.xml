@@ -27,4 +27,12 @@
         <item name="android:textSize">@dimen/keypad_button_text_size</item>
     </style>
 
+    <style name="TimerButtons">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/timer_button_text_size</item>
+        <item name="android:textColor">@color/White</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
 </resources>

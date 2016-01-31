@@ -1,6 +1,7 @@
 package com.luanthanhthai.android.liteworkouttimer;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +14,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -26,6 +29,9 @@ public class TimerFragment extends Fragment {
     private Toolbar mToolbar;
     private Button mStartButton;
     private Button mRestButton;
+    private Button mPauseButton;
+    private Button mResetButton;
+    private Button mStartButton2;
     private boolean isRunning;
 
     public static TimerFragment newInstance() {
@@ -46,35 +52,50 @@ public class TimerFragment extends Fragment {
         mToolbar = (Toolbar) v.findViewById(R.id.toolbar);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(mToolbar);
-
+        
         // Check if timer is running
         isRunning = false;
 
         mStartButton = (Button) v.findViewById(R.id.button_start);
         mStartButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (isRunning) {
-                    mStartButton.setText("START");
-                    mStartButton.setBackgroundColor(getResources().getColor(R.color.Green_500));
-                    isRunning = false;
-                } else {
-                    mStartButton.setText("PAUSE");
-                    mStartButton.setBackgroundColor(getResources().getColor(R.color.Amber_600));
-                    isRunning = true;
-                }
+                keypadSlideDown();
+                pauseBarSlideUP();
+                isRunning = true;
             }
         });
 
         mRestButton = (Button) v.findViewById(R.id.button_rest);
         mRestButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (isRunning) {
-                    mRestButton.setText("REST");
-                    isRunning = false;
-                } else {
-                    mRestButton.setText("RESET");
-                    isRunning = true;
-                }
+                keypadSlideDown();
+                pauseBarSlideUP();
+                isRunning = true;
+            }
+        });
+
+        mPauseButton = (Button) v.findViewById(R.id.button_pause);
+        mPauseButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                mPauseButton.setVisibility(view.INVISIBLE);
+                isRunning = false;
+            }
+        });
+
+        mStartButton2 = (Button) v.findViewById(R.id.button_restart);
+        mStartButton2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                mPauseButton.setVisibility(view.VISIBLE);
+                isRunning = true;
+            }
+        });
+
+        mResetButton = (Button) v.findViewById(R.id.button_reset);
+        mResetButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                pauseBarSlideDown();
+                keypadSlideUp();
+                isRunning = false;
             }
         });
 
@@ -83,6 +104,38 @@ public class TimerFragment extends Fragment {
         setHasOptionsMenu(true);
 
         return v;
+    }
+
+    public void keypadSlideUp() {
+        Animation slideUp = AnimationUtils.loadAnimation(getContext(), R.anim.slide_bottom_up);
+
+        ViewGroup keypadPanel = (ViewGroup) getView().findViewById(R.id.start_button_bar_with_keypad);
+        keypadPanel.startAnimation(slideUp);
+        keypadPanel.setVisibility(getView().VISIBLE);
+    }
+
+    public void keypadSlideDown() {
+        Animation slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.slide_bottom_down);
+
+        ViewGroup keypadPanel = (ViewGroup) getView().findViewById(R.id.start_button_bar_with_keypad);
+        keypadPanel.startAnimation(slideDown);
+        keypadPanel.setVisibility(getView().GONE);
+    }
+
+    public void pauseBarSlideUP() {
+        Animation slideUp = AnimationUtils.loadAnimation(getContext(), R.anim.slide_bottom_up);
+
+        ViewGroup pauseBar = (ViewGroup) getView().findViewById(R.id.pause_button_bar);
+        pauseBar.startAnimation(slideUp);
+        pauseBar.setVisibility(getView().VISIBLE);
+    }
+
+    public void pauseBarSlideDown() {
+        Animation slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.slide_bottom_down);
+
+        ViewGroup pauseBar = (ViewGroup) getView().findViewById(R.id.pause_button_bar);
+        pauseBar.startAnimation(slideDown);
+        pauseBar.setVisibility(getView().GONE);
     }
 
     @Override

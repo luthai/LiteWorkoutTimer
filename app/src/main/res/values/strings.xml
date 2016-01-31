@@ -25,5 +25,6 @@
     <string name="rest_button">REST</string>
     <string name="pause_button">PAUSE</string>
     <string name="reset_button">RESET</string>
+    <string name="restart_button">RESTART</string>
 
 </resources>

@@ -14,7 +14,7 @@
     <dimen name="keypad_button_text_size">32sp</dimen>
 
     //Timer buttons
-    <dimen name="timer_buttons_padding_top">5dp</dimen>
+    <dimen name="timer_buttons_padding">8dp</dimen>
     <dimen name="timer_buttons_layout_margin">0dp</dimen>
     <dimen name="timer_button_text_size">16sp</dimen>
     <dimen name="timer_button_height">48dp</dimen>

@@ -8,22 +8,14 @@
 
     <Button
         android:id="@+id/button_rest"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/LightBlue_500"
+        android:background="@drawable/timer_rest_button"
         android:text="@string/rest_button"
-        android:textColor="@color/White"
-        android:textSize="@dimen/timer_button_text_size"/>
+        style="@style/TimerButtons"/>
 
     <Button
         android:id="@+id/button_start"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/Green_500"
+        android:background="@drawable/timer_start_button"
         android:text="@string/start_button"
-        android:textColor="@color/White"
-        android:textSize="@dimen/timer_button_text_size"/>
+        style="@style/TimerButtons"/>
 
 </LinearLayout>
