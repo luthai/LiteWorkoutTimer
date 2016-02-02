@@ -1,16 +1,11 @@
 package com.luanthanhthai.android.liteworkouttimer;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,19 +19,14 @@ import android.widget.Toast;
  * Copyright (c) [2016] [Luan Thanh Thai]
  * See the file LICENSE.txt for copying permission
  */
-public class TimerFragment extends Fragment {
+public class TimerFragment extends Fragment implements View.OnClickListener {
 
-    private Toolbar mToolbar;
-    private Button mStartButton;
-    private Button mRestButton;
     private Button mPauseButton;
-    private Button mResetButton;
-    private Button mStartButton2;
 
     private ViewGroup keypadPanel;
-    private ViewGroup pauseBar;
+    private ViewGroup pauseBarPanel;
 
-    private boolean isRunning;
+    private boolean isRunning = false;
 
     public static TimerFragment newInstance() {
         return new TimerFragment();
@@ -53,59 +43,29 @@ public class TimerFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_timer, container, false);
 
-        mToolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.setSupportActionBar(mToolbar);
-        
-        // Check if timer is running
-        isRunning = false;
+        activity.setSupportActionBar(toolbar);
 
         // The sliding panels
         keypadPanel = (ViewGroup) v.findViewById(R.id.start_button_bar_with_keypad);
-        pauseBar = (ViewGroup) v.findViewById(R.id.pause_button_bar);
+        pauseBarPanel = (ViewGroup) v.findViewById(R.id.pause_button_bar);
 
-        mStartButton = (Button) v.findViewById(R.id.button_start);
-        mStartButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                keypadSlideDown();
-                pauseBarSlideUP();
-                isRunning = true;
-            }
-        });
-
-        mRestButton = (Button) v.findViewById(R.id.button_rest);
-        mRestButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                keypadSlideDown();
-                pauseBarSlideUP();
-                isRunning = true;
-            }
-        });
-
+        // Timer buttons
+        Button startButton = (Button) v.findViewById(R.id.button_start);
+        startButton.setOnClickListener(this);
+        Button restButton = (Button) v.findViewById(R.id.button_rest);
+        restButton.setOnClickListener(this);
         mPauseButton = (Button) v.findViewById(R.id.button_pause);
-        mPauseButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                mPauseButton.setVisibility(View.INVISIBLE);
-                isRunning = false;
-            }
-        });
+        mPauseButton.setOnClickListener(this);
+        Button restartButton = (Button) v.findViewById(R.id.button_restart);
+        restartButton.setOnClickListener(this);
+        Button resetButton = (Button) v.findViewById(R.id.button_reset);
+        resetButton.setOnClickListener(this);
 
-        mStartButton2 = (Button) v.findViewById(R.id.button_restart);
-        mStartButton2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                mPauseButton.setVisibility(View.VISIBLE);
-                isRunning = true;
-            }
-        });
+        // Keypad numeric buttons
 
-        mResetButton = (Button) v.findViewById(R.id.button_reset);
-        mResetButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                pauseBarSlideDown();
-                keypadSlideUp();
-                isRunning = false;
-            }
-        });
+
 
         // For backwards compatibility set this
         // near the end
@@ -114,38 +74,51 @@ public class TimerFragment extends Fragment {
         return v;
     }
 
-    public void keypadSlideUp() {
-        Animation slideUp = AnimationUtils.loadAnimation(getContext(), R.anim.slide_bottom_up);
-
-        keypadPanel.startAnimation(slideUp);
-        keypadPanel.setVisibility(View.VISIBLE);
-    }
-
-    public void keypadSlideDown() {
-        Animation slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.slide_bottom_down);
-
-        keypadPanel.startAnimation(slideDown);
-        keypadPanel.setVisibility(View.GONE);
-    }
-
-    public void pauseBarSlideUP() {
-        Animation slideUp = AnimationUtils.loadAnimation(getContext(), R.anim.slide_bottom_up);
-
-        pauseBar.startAnimation(slideUp);
-        pauseBar.setVisibility(View.VISIBLE);
-    }
-
-    public void pauseBarSlideDown() {
-        Animation slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.slide_bottom_down);
-
-        pauseBar.startAnimation(slideDown);
-        pauseBar.setVisibility(View.GONE);
-    }
-
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_timer, menu);
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_start:
+                animSlidePanel(keypadPanel, pauseBarPanel);
+                isRunning = true;
+                break;
+
+            case R.id.button_rest:
+                animSlidePanel(keypadPanel, pauseBarPanel);
+                isRunning = true;
+                break;
+
+            case R.id.button_pause:
+                mPauseButton.setVisibility(View.INVISIBLE);
+                isRunning = false;
+                break;
+
+            case R.id.button_restart:
+                mPauseButton.setVisibility(View.VISIBLE);
+                isRunning = true;
+                break;
+
+            case R.id.button_reset:
+                animSlidePanel(pauseBarPanel, keypadPanel);
+                isRunning = false;
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    public void animSlidePanel(ViewGroup slidePanelDown, ViewGroup slidePanelUp) {
+        // Slide panel down
+        Animation slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.slide_bottom_down);
+
+        slidePanelDown.startAnimation(slideDown);
+        slidePanelDown.setVisibility(View.GONE);
+
+        //Slide panel up
+        Animation slideUp = AnimationUtils.loadAnimation(getContext(), R.anim.slide_bottom_up);
+
+        slidePanelUp.startAnimation(slideUp);
+        slidePanelUp.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -161,11 +134,13 @@ public class TimerFragment extends Fragment {
                 toast = Toast.makeText(context, text, duration);
                 toast.show();
                 return true;
+
             case R.id.menu_ic_settings:
                 text = "Settings";
                 toast = Toast.makeText(context, text, duration);
                 toast.show();
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
