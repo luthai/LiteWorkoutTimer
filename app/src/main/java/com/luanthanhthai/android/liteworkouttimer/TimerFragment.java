@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 /**
@@ -25,6 +26,8 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
 
     private ViewGroup keypadPanel;
     private ViewGroup pauseBarPanel;
+
+    private EditText editText;
 
     private boolean isRunning = false;
 
@@ -51,6 +54,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         keypadPanel = (ViewGroup) v.findViewById(R.id.start_button_bar_with_keypad);
         pauseBarPanel = (ViewGroup) v.findViewById(R.id.pause_button_bar);
 
+        // Edit Text
+        editText = (EditText) v.findViewById(R.id.test_view);
+
         // Timer buttons
         Button startButton = (Button) v.findViewById(R.id.button_start);
         startButton.setOnClickListener(this);
@@ -64,7 +70,22 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         resetButton.setOnClickListener(this);
 
         // Keypad numeric buttons
+        int[] keypadButtons = {
+                                R.id.button_0, R.id.button_1, R.id.button_2,
+                                R.id.button_3, R.id.button_4, R.id.button_5,
+                                R.id.button_6, R.id.button_7, R.id.button_8,
+                                R.id.button_9
+                              };
 
+        for (int i = 0; i < keypadButtons.length; ++i) {
+            Button keypadButton = (Button) v.findViewById(keypadButtons[i]);
+            final int finalI = i;
+            keypadButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    editText.setText(String.valueOf(finalI));
+                }
+            });
+        }
 
 
         // For backwards compatibility set this
@@ -101,7 +122,47 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                 animSlidePanel(pauseBarPanel, keypadPanel);
                 isRunning = false;
                 break;
+/*
+            case R.id.button_0:
+                editText.setText("0");
+                break;
 
+            case R.id.button_1:
+                editText.setText("1");
+                break;
+
+            case R.id.button_2:
+                editText.setText("2");
+                break;
+
+            case R.id.button_3:
+                editText.setText("3");
+                break;
+
+            case R.id.button_4:
+                editText.setText("4");
+                break;
+
+            case R.id.button_5:
+                editText.setText("5");
+                break;
+
+            case R.id.button_6:
+                editText.setText("6");
+                break;
+
+            case R.id.button_7:
+                editText.setText("7");
+                break;
+
+            case R.id.button_8:
+                editText.setText("8");
+                break;
+
+            case R.id.button_9:
+                editText.setText("9");
+                break;
+*/
             default:
                 break;
         }
