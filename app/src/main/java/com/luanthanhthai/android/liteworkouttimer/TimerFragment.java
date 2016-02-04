@@ -129,6 +129,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
 
             case R.id.button_reset:
                 animSlidePanel(pauseBarPanel, keypadPanel);
+                mPauseButton.setVisibility(View.VISIBLE);
                 isRunning = false;
                 break;
 
@@ -164,22 +165,23 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         FragmentManager fragmentManager = getFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
-
+        Fragment fragment;
 
         switch (item.getItemId()) {
             case R.id.menu_ic_create_routine:
-                if (fragment == null) {
-                    fragment = new CreateRoutinesFragment();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, fragment)
-                            .addToBackStack(null)
-                            .commit();
-                }
+                fragment = new CreateRoutinesFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
                 return true;
 
             case R.id.menu_ic_settings:
-
+                fragment = new SettingsFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
                 return true;
 
             default:
