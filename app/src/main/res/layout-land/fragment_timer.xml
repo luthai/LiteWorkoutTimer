@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) [2016] [Luan Thanh Thai] -->
+<!-- See the file LICENSE.txt for copying permission -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/fragment_timer_view"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/White">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
+
+    <EditText
+    android:id="@+id/test_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/toolbar"
+    android:layout_marginTop="25dp"/>
+
+    <RelativeLayout
+        android:id="@+id/timer_button_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/pause_button_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"
+            android:elevation="4dp"
+            layout="@layout/pause_reset_buttons"/>
+
+        <LinearLayout
+            android:id="@+id/start_button_bar_with_keypad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/White"
+            android:elevation="@dimen/keypad_bottom_margin"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/keypad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="4dp"
+                layout="@layout/keypad"/>
+
+            <include
+                android:id="@+id/start_button_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                layout="@layout/start_rest_buttons"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) [2016] [Luan Thanh Thai] -->
+<!-- See the file LICENSE.txt for copying permission -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="bottom|center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/button_1"
+            style="@style/KeypadLayoutStyle"
+            android:layout_weight="1"
+            android:text="@string/digit1"/>
+
+        <Button
+            android:id="@+id/button_2"
+            style="@style/KeypadLayoutStyle"
+            android:layout_weight="1"
+            android:text="@string/digit2"/>
+
+        <Button
+            android:id="@+id/button_3"
+            style="@style/KeypadLayoutStyle"
+            android:layout_weight="1"
+            android:text="@string/digit3"/>
+
+        <Button
+            android:id="@+id/button_4"
+            style="@style/KeypadLayoutStyle"
+            android:layout_weight="1"
+            android:text="@string/digit4"/>
+
+        <Button
+            android:id="@+id/button_5"
+            style="@style/KeypadLayoutStyle"
+            android:layout_weight="1"
+            android:text="@string/digit5"/>
+
+        <ImageButton
+            android:id="@+id/button_del"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            style="@style/KeypadLayoutStyle"
+            android:src="@drawable/ic_backspace_active"
+            android:contentDescription="@string/delete_description"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/button_6"
+            style="@style/KeypadLayoutStyle"
+            android:layout_weight="1"
+            android:text="@string/digit6"/>
+
+        <Button
+            android:id="@+id/button_7"
+            style="@style/KeypadLayoutStyle"
+            android:layout_weight="1"
+            android:text="@string/digit7"/>
+
+        <Button
+            android:id="@+id/button_8"
+            style="@style/KeypadLayoutStyle"
+            android:layout_weight="1"
+            android:text="@string/digit8"/>
+
+        <Button
+            android:id="@+id/button_9"
+            style="@style/KeypadLayoutStyle"
+            android:layout_weight="1"
+            android:text="@string/digit9"/>
+
+        <Button
+            android:id="@+id/button_0"
+            style="@style/KeypadLayoutStyle"
+            android:layout_weight="1"
+            android:text="@string/digit0"/>
+
+        <Button
+            android:id="@+id/button_empty"
+            style="@style/KeypadLayoutStyle"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+</LinearLayout>
