@@ -3,9 +3,13 @@ package com.luanthanhthai.android.liteworkouttimer;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 /**
@@ -44,29 +49,29 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_timer, container, false);
+        View view = inflater.inflate(R.layout.fragment_timer, container, false);
 
-        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
 
         // The sliding panels
-        keypadPanel = (ViewGroup) v.findViewById(R.id.start_button_bar_with_keypad);
-        pauseBarPanel = (ViewGroup) v.findViewById(R.id.pause_button_bar);
+        keypadPanel = (ViewGroup) view.findViewById(R.id.start_button_bar_with_keypad);
+        pauseBarPanel = (ViewGroup) view.findViewById(R.id.pause_button_bar);
 
         // Edit Text
-        editText = (EditText) v.findViewById(R.id.test_view);
+        editText = (EditText) view.findViewById(R.id.test_view);
 
         // Timer buttons
-        Button startButton = (Button) v.findViewById(R.id.button_start);
+        Button startButton = (Button) view.findViewById(R.id.button_start);
         startButton.setOnClickListener(this);
-        Button restButton = (Button) v.findViewById(R.id.button_rest);
+        Button restButton = (Button) view.findViewById(R.id.button_rest);
         restButton.setOnClickListener(this);
-        mPauseButton = (Button) v.findViewById(R.id.button_pause);
+        mPauseButton = (Button) view.findViewById(R.id.button_pause);
         mPauseButton.setOnClickListener(this);
-        Button restartButton = (Button) v.findViewById(R.id.button_restart);
+        Button restartButton = (Button) view.findViewById(R.id.button_restart);
         restartButton.setOnClickListener(this);
-        Button resetButton = (Button) v.findViewById(R.id.button_reset);
+        Button resetButton = (Button) view.findViewById(R.id.button_reset);
         resetButton.setOnClickListener(this);
 
         // Keypad numeric buttons
@@ -78,7 +83,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                               };
 
         for (int i = 0; i < keypadButtons.length; ++i) {
-            Button keypadButton = (Button) v.findViewById(keypadButtons[i]);
+            Button keypadButton = (Button) view.findViewById(keypadButtons[i]);
             final int finalI = i;
             keypadButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -87,12 +92,16 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             });
         }
 
+        // Keypad backspace button
+        ImageButton mDelButton = (ImageButton) view.findViewById(R.id.button_del);
+        mDelButton.setOnClickListener(this);
+
 
         // For backwards compatibility set this
         // near the end
         setHasOptionsMenu(true);
 
-        return v;
+        return view;
     }
 
     @Override
@@ -122,47 +131,11 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                 animSlidePanel(pauseBarPanel, keypadPanel);
                 isRunning = false;
                 break;
-/*
-            case R.id.button_0:
-                editText.setText("0");
+
+            case R.id.button_del:
+                // Backspace insert later
                 break;
 
-            case R.id.button_1:
-                editText.setText("1");
-                break;
-
-            case R.id.button_2:
-                editText.setText("2");
-                break;
-
-            case R.id.button_3:
-                editText.setText("3");
-                break;
-
-            case R.id.button_4:
-                editText.setText("4");
-                break;
-
-            case R.id.button_5:
-                editText.setText("5");
-                break;
-
-            case R.id.button_6:
-                editText.setText("6");
-                break;
-
-            case R.id.button_7:
-                editText.setText("7");
-                break;
-
-            case R.id.button_8:
-                editText.setText("8");
-                break;
-
-            case R.id.button_9:
-                editText.setText("9");
-                break;
-*/
             default:
                 break;
         }
@@ -183,23 +156,30 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_timer, menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Context context = getActivity();
-        CharSequence text;
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast;
+        FragmentManager fragmentManager = getFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
+
 
         switch (item.getItemId()) {
             case R.id.menu_ic_create_routine:
-                text = "Create routine";
-                toast = Toast.makeText(context, text, duration);
-                toast.show();
+                if (fragment == null) {
+                    fragment = new CreateRoutinesFragment();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, fragment)
+                            .addToBackStack(null)
+                            .commit();
+                }
                 return true;
 
             case R.id.menu_ic_settings:
-                text = "Settings";
-                toast = Toast.makeText(context, text, duration);
-                toast.show();
+
                 return true;
 
             default:
