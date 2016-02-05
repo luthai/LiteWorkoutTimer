@@ -31,7 +31,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:visibility="gone"
-            android:elevation="4dp"
             layout="@layout/pause_reset_buttons"/>
 
         <LinearLayout
@@ -40,14 +39,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/White"
-            android:elevation="@dimen/keypad_bottom_margin"
             android:orientation="vertical">
 
             <include
                 android:id="@+id/keypad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:layout_marginBottom="4dp"
                 layout="@layout/keypad"/>
 
@@ -55,7 +52,6 @@
                 android:id="@+id/start_button_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 layout="@layout/start_rest_buttons"/>
 
         </LinearLayout>
