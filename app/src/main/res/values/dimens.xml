@@ -19,4 +19,9 @@
     <dimen name="timer_button_text_size">16sp</dimen>
     <dimen name="timer_button_height">48dp</dimen>
 
+    // Timer view
+    <dimen name="timer_view_text_size">120sp</dimen>
+    <dimen name="timer_view_padding">10dp</dimen>
+    <dimen name="timer_view_margin_top">120dp</dimen>
+
 </resources>

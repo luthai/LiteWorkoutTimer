@@ -1,10 +1,9 @@
 package com.luanthanhthai.android.liteworkouttimer;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -16,9 +15,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
+import android.widget.TextView;
+
 
 /**
  * Created by Thai on 15.01.2016.
@@ -28,11 +27,10 @@ import android.widget.Toast;
 public class TimerFragment extends Fragment implements View.OnClickListener {
 
     private Button mPauseButton;
+    private TextView mTextView;
 
     private ViewGroup keypadPanel;
     private ViewGroup pauseBarPanel;
-
-    private EditText editText;
 
     private boolean isRunning = false;
 
@@ -59,9 +57,6 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         keypadPanel = (ViewGroup) view.findViewById(R.id.start_button_bar_with_keypad);
         pauseBarPanel = (ViewGroup) view.findViewById(R.id.pause_button_bar);
 
-        // Edit Text
-        editText = (EditText) view.findViewById(R.id.test_view);
-
         // Timer buttons
         Button startButton = (Button) view.findViewById(R.id.button_start);
         startButton.setOnClickListener(this);
@@ -87,7 +82,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             final int finalI = i;
             keypadButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    editText.setText(String.valueOf(finalI));
+                    mTextView.setText(String.valueOf(finalI));
                 }
             });
         }
@@ -95,6 +90,12 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         // Keypad backspace button
         ImageButton mDelButton = (ImageButton) view.findViewById(R.id.button_del);
         mDelButton.setOnClickListener(this);
+
+        // Timer Text
+        mTextView = (TextView) view.findViewById(R.id.timer_text);
+
+
+
 
 
         // For backwards compatibility set this
@@ -154,6 +155,24 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
 
         slidePanelUp.startAnimation(slideUp);
         slidePanelUp.setVisibility(View.VISIBLE);
+    }
+
+    public void WorkoutTimer(long millisUntilFinished) {
+        int countDownInterval = 1000;
+        new CountDownTimer(millisUntilFinished, countDownInterval) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                // Reset timer
+                // or run next timer
+                // (for now only reset timer)
+
+            }
+        }.start();
     }
 
     @Override
