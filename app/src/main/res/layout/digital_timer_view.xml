@@ -18,6 +18,7 @@
         <TextView
             android:id="@+id/timer_colon_view"
             android:text=":"
+            android:clickable="false"
             style="@style/DigitalTimerView"/>
 
         <TextView

@@ -1,9 +1,13 @@
 package com.luanthanhthai.android.liteworkouttimer;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -19,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 
+
 /**
  * Created by Thai on 15.01.2016.
  * Copyright (c) [2016] [Luan Thanh Thai]
@@ -27,10 +32,12 @@ import android.widget.TextView;
 public class TimerFragment extends Fragment implements View.OnClickListener {
 
     private Button mPauseButton;
-    private TextView mTextView;
+    private TextView mMinutesView;
+    private TextView mSecondsView;
 
     private ViewGroup keypadPanel;
     private ViewGroup pauseBarPanel;
+
 
     private boolean isRunning = false;
 
@@ -81,8 +88,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             Button keypadButton = (Button) view.findViewById(keypadButtons[i]);
             final int finalI = i;
             keypadButton.setOnClickListener(new View.OnClickListener() {
+                @Override
                 public void onClick(View v) {
-                    mTextView.setText(String.valueOf(finalI));
+                    mMinutesView.setText(String.valueOf(finalI));
                 }
             });
         }
@@ -91,18 +99,45 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         ImageButton mDelButton = (ImageButton) view.findViewById(R.id.button_del);
         mDelButton.setOnClickListener(this);
 
-        // Timer Text
-        mTextView = (TextView) view.findViewById(R.id.timer_text);
+        // Digital timer view
+        mMinutesView = (TextView) view.findViewById(R.id.timer_minutes_text_view);
+        mSecondsView = (TextView) view.findViewById(R.id.timer_seconds_text_view);
 
+        View.OnClickListener TimerTextView = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView selectedView = (TextView) v;
+                if (selectedView == mMinutesView) {
+                    mMinutesView.setSelected(true);
+                    mSecondsView.setSelected(false);
+                    mMinutesView.setTextColor(getColor(getContext(), R.color.LightBlue_500));
+                    mSecondsView.setTextColor(getColor(getContext(), R.color.Black_0_87));
+                } else if (selectedView == mSecondsView) {
+                    mSecondsView.setSelected(true);
+                    mMinutesView.setSelected(false);
+                    mSecondsView.setTextColor(getColor(getContext(), R.color.LightBlue_500));
+                    mMinutesView.setTextColor(getColor(getContext(), R.color.Black_0_87));
+                }
+            }
+        };
 
-
-
+        mMinutesView.setOnClickListener(TimerTextView);
+        mSecondsView.setOnClickListener(TimerTextView);
 
         // For backwards compatibility set this
         // near the end
         setHasOptionsMenu(true);
 
         return view;
+    }
+
+    public static final int getColor(Context context, int id) {
+        final int version = Build.VERSION.SDK_INT;
+        if (version >= 23) {
+            return ContextCompat.getColor(context, id);
+        } else {
+            return context.getResources().getColor(id);
+        }
     }
 
     @Override

@@ -44,6 +44,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/timer_view_text_size</item>
         <item name="android:textColor">@color/Black_0.87</item>
+        <item name="android:clickable">true</item>
     </style>
 
 
