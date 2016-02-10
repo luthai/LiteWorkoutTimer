@@ -34,6 +34,12 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     private Button mPauseButton;
     private TextView mMinutesView;
     private TextView mSecondsView;
+    private int[] keypadButtons = {
+                R.id.button_0, R.id.button_1, R.id.button_2,
+                R.id.button_3, R.id.button_4, R.id.button_5,
+                R.id.button_6, R.id.button_7, R.id.button_8,
+                R.id.button_9
+    };
 
     private ViewGroup keypadPanel;
     private ViewGroup pauseBarPanel;
@@ -77,22 +83,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         resetButton.setOnClickListener(this);
 
         // Keypad numeric buttons
-        int[] keypadButtons = {
-                                R.id.button_0, R.id.button_1, R.id.button_2,
-                                R.id.button_3, R.id.button_4, R.id.button_5,
-                                R.id.button_6, R.id.button_7, R.id.button_8,
-                                R.id.button_9
-                              };
-
-        for (int i = 0; i < keypadButtons.length; ++i) {
-            Button keypadButton = (Button) view.findViewById(keypadButtons[i]);
-            final int finalI = i;
-            keypadButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mMinutesView.setText(String.valueOf(finalI));
-                }
-            });
+        for (int keypadId : keypadButtons) {
+            Button keypadButtonId = (Button) view.findViewById(keypadId);
+            keypadButtonId.setOnClickListener(keypadListener);
         }
 
         // Keypad backspace button
@@ -102,33 +95,46 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         // Digital timer view
         mMinutesView = (TextView) view.findViewById(R.id.timer_minutes_text_view);
         mSecondsView = (TextView) view.findViewById(R.id.timer_seconds_text_view);
-
-        View.OnClickListener TimerTextView = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TextView selectedView = (TextView) v;
-                if (selectedView == mMinutesView) {
-                    mMinutesView.setSelected(true);
-                    mSecondsView.setSelected(false);
-                    mMinutesView.setTextColor(getColor(getContext(), R.color.LightBlue_500));
-                    mSecondsView.setTextColor(getColor(getContext(), R.color.Black_0_87));
-                } else if (selectedView == mSecondsView) {
-                    mSecondsView.setSelected(true);
-                    mMinutesView.setSelected(false);
-                    mSecondsView.setTextColor(getColor(getContext(), R.color.LightBlue_500));
-                    mMinutesView.setTextColor(getColor(getContext(), R.color.Black_0_87));
-                }
-            }
-        };
-
-        mMinutesView.setOnClickListener(TimerTextView);
-        mSecondsView.setOnClickListener(TimerTextView);
+        mMinutesView.setOnClickListener(timerTextViewListener);
+        mSecondsView.setOnClickListener(timerTextViewListener);
 
         // For backwards compatibility set this
         // near the end
         setHasOptionsMenu(true);
 
         return view;
+    }
+
+    View.OnClickListener keypadListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int selectedButton = v.getId();
+            for (int i = 0; i < keypadButtons.length; ++i) {
+                if (selectedButton == keypadButtons[i]) {
+                    mMinutesView.setText(String.valueOf(i));
+                    return;
+                }
+            }
+        }
+    };
+
+    View.OnClickListener timerTextViewListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            TextView selectedView = (TextView) v;
+            if (selectedView == mMinutesView) {
+                setTimerTextView(mMinutesView, mSecondsView);
+            } else if (selectedView == mSecondsView) {
+                setTimerTextView(mSecondsView, mMinutesView);
+            }
+        }
+    };
+
+    public void setTimerTextView(TextView textView1, TextView textView2) {
+        textView1.setSelected(true);
+        textView2.setSelected(false);
+        textView1.setTextColor(getColor(getContext(), R.color.LightBlue_500));
+        textView2.setTextColor(getColor(getContext(), R.color.Black_0_87));
     }
 
     public static final int getColor(Context context, int id) {
@@ -139,6 +145,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             return context.getResources().getColor(id);
         }
     }
+
 
     @Override
     public void onClick(View v) {
