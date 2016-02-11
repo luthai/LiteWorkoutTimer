@@ -20,7 +20,7 @@
         android:layout_below="@id/toolbar"
         android:gravity="center_horizontal"
         android:layout_marginTop="30dp"
-        android:textColor="@color/Black_0.87"
+        android:textColor="@color/Black_opacity_87"
         android:text="Time"
         android:textSize="55sp"/>
 

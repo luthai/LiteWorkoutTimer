@@ -8,7 +8,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_gravity="bottom|center"
-              android:background="@color/Black_0.12">
+              android:background="@color/Black_opacity_12">
 
     <include
         android:id="@+id/numeric_keypad"

@@ -9,10 +9,10 @@
     <color name="LightBlue_700">#0288D1</color><!-- StatusBar-->
     <color name="LightBlue_100">#B3E5FC</color>
     <color name="IndigoAccent_200">#536DFE</color><!-- Accent -->
-    <color name="Black_0.87">#212121</color><!-- PrimaryText -->
-    <color name="Black_0.54">#737373</color><!-- SecondaryText/Icons -->
-    <color name="Black_0.38">#9b9b9b</color><!-- Disabled/Hint -->
-    <color name="Black_0.12">#dbdbdb</color><!-- Dividers -->
+    <color name="Black_opacity_87">#212121</color><!-- PrimaryText -->
+    <color name="Black_opacity_54">#737373</color><!-- SecondaryText/Icons -->
+    <color name="Black_opacity_38">#9b9b9b</color><!-- Disabled/Hint -->
+    <color name="Black_opacity_12">#dbdbdb</color><!-- Dividers -->
 
     // Keypad colors
     <color name="colorKeypadButtonText">#03A9F4</color><!-- LightBlue_500 -->

@@ -45,8 +45,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
 
     private int finalMinutesValue = 0;
     private int finalSecondsValue = 0;
-    private boolean firstMinutesDigit = false;
-    private boolean firstSecondsDigit = false;
+    private boolean firstDigitHasValue = false;
     private boolean isRunning = false;
 
     public static TimerFragment newInstance() {
@@ -129,27 +128,19 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             int selectedButton = v.getId();
-            for (int i = 0; i < keypadButtons.length; ++i) {
-                if (selectedButton == keypadButtons[i]) {
+            for (int digit = 0; digit < keypadButtons.length; ++digit) {
+                if (selectedButton == keypadButtons[digit]) {
                     if (mMinutesView.isSelected()) {
-                        if (!firstMinutesDigit) {
-                            firstMinutesDigit = true;
-                            finalMinutesValue = i;
-                            mMinutesView.setText(String.format("%02d", finalMinutesValue));
+                        if (!firstDigitHasValue) {
+                            setTimerClock(mMinutesView, true, digit);
                         } else {
-                            firstMinutesDigit = false;
-                            finalMinutesValue = concatenateDigits(finalMinutesValue, i);
-                            mMinutesView.setText(String.valueOf(finalMinutesValue));
+                            setTimerClock(mMinutesView, false, digit);
                         }
                     } else if (mSecondsView.isSelected()) {
-                        if (!firstSecondsDigit) {
-                            firstSecondsDigit = true;
-                            finalSecondsValue = i;
-                            mSecondsView.setText(String.format("%02d", finalSecondsValue));
+                        if (!firstDigitHasValue) {
+                            setTimerClock(mSecondsView, true, digit);
                         } else {
-                            firstSecondsDigit = false;
-                            finalSecondsValue = concatenateDigits(finalSecondsValue, i);
-                            mSecondsView.setText(String.valueOf(finalSecondsValue));
+                            setTimerClock(mSecondsView, false, digit);
                         }
                     }
 
@@ -158,6 +149,17 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             }
         }
     };
+
+    public void setTimerClock(TextView selectedTimerView, boolean b, int i) {
+        if (b) {
+            firstDigitHasValue = true;
+            finalSecondsValue = i;
+        } else {
+            firstDigitHasValue = false;
+            finalSecondsValue = concatenateDigits(finalSecondsValue, i);
+        }
+        selectedTimerView.setText(String.format("%02d", finalSecondsValue));
+    }
 
     public int concatenateDigits(int second, int first) {
         return (second * 10) + first;
@@ -168,18 +170,19 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         public void onClick(View v) {
             TextView selectedView = (TextView) v;
             if (selectedView == mMinutesView) {
-                setTimerTextView(mMinutesView, mSecondsView);
+                selectTimerTextView(mMinutesView, mSecondsView);
             } else if (selectedView == mSecondsView) {
-                setTimerTextView(mSecondsView, mMinutesView);
+                selectTimerTextView(mSecondsView, mMinutesView);
             }
         }
     };
 
-    public void setTimerTextView(TextView textView1, TextView textView2) {
-        textView1.setSelected(true);
-        textView2.setSelected(false);
-        textView1.setTextColor(getColor(getContext(), R.color.LightBlue_500));
-        textView2.setTextColor(getColor(getContext(), R.color.Black_0_87));
+    public void selectTimerTextView(TextView selectView, TextView deselectView) {
+        selectView.setSelected(true);
+        deselectView.setSelected(false);
+        selectView.setTextColor(getColor(getContext(), R.color.LightBlue_500));
+        deselectView.setTextColor(getColor(getContext(), R.color.Black_opacity_87));
+        firstDigitHasValue = false;
     }
 
     @SuppressWarnings("deprecation")
@@ -198,12 +201,14 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_start:
-                animSlidePanel(keypadPanel, pauseBarPanel);
+                animSlidePanelDown(keypadPanel);
+                animSlidePanelUp(pauseBarPanel);
                 isRunning = true;
                 break;
 
             case R.id.button_rest:
-                animSlidePanel(keypadPanel, pauseBarPanel);
+                animSlidePanelDown(keypadPanel);
+                animSlidePanelUp(pauseBarPanel);
                 isRunning = true;
                 break;
 
@@ -218,7 +223,8 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.button_reset:
-                animSlidePanel(pauseBarPanel, keypadPanel);
+                animSlidePanelDown(pauseBarPanel);
+                animSlidePanelUp(keypadPanel);
                 mPauseButton.setVisibility(View.VISIBLE);
                 isRunning = false;
                 break;
@@ -232,18 +238,18 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void animSlidePanel(ViewGroup slidePanelDown, ViewGroup slidePanelUp) {
-        // Slide panel down
-        Animation slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.slide_bottom_down);
-
-        slidePanelDown.startAnimation(slideDown);
-        slidePanelDown.setVisibility(View.GONE);
-
-        //Slide panel up
+    public void animSlidePanelUp(ViewGroup slidePanelUp) {
         Animation slideUp = AnimationUtils.loadAnimation(getContext(), R.anim.slide_bottom_up);
 
         slidePanelUp.startAnimation(slideUp);
         slidePanelUp.setVisibility(View.VISIBLE);
+    }
+
+    public void animSlidePanelDown(ViewGroup slidePanelDown) {
+        Animation slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.slide_bottom_down);
+
+        slidePanelDown.startAnimation(slideDown);
+        slidePanelDown.setVisibility(View.GONE);
     }
 
     @Override
