@@ -1,7 +1,6 @@
 package com.luanthanhthai.android.liteworkouttimer;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -22,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.Stack;
 
 
 /**
@@ -34,6 +34,8 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     private Button mPauseButton;
     private TextView mMinutesView;
     private TextView mSecondsView;
+    private ViewGroup keypadPanel;
+    private ViewGroup pauseBarPanel;
     private int[] keypadButtons = {
                 R.id.button_0, R.id.button_1, R.id.button_2,
                 R.id.button_3, R.id.button_4, R.id.button_5,
@@ -41,10 +43,10 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                 R.id.button_9
     };
 
-    private ViewGroup keypadPanel;
-    private ViewGroup pauseBarPanel;
-
-
+    private int finalMinutesValue = 0;
+    private int finalSecondsValue = 0;
+    private boolean firstMinutesDigit = false;
+    private boolean firstSecondsDigit = false;
     private boolean isRunning = false;
 
     public static TimerFragment newInstance() {
@@ -105,18 +107,61 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    public void WorkoutTimer(long millisUntilFinished) {
+        int countDownInterval = 1000;
+        new CountDownTimer(millisUntilFinished, countDownInterval) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                // Reset timer
+                // or run next timer
+                // (for now only reset timer)
+
+            }
+        }.start();
+    }
+
     View.OnClickListener keypadListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             int selectedButton = v.getId();
             for (int i = 0; i < keypadButtons.length; ++i) {
                 if (selectedButton == keypadButtons[i]) {
-                    mMinutesView.setText(String.valueOf(i));
+                    if (mMinutesView.isSelected()) {
+                        if (!firstMinutesDigit) {
+                            firstMinutesDigit = true;
+                            finalMinutesValue = i;
+                            mMinutesView.setText(String.format("%02d", finalMinutesValue));
+                        } else {
+                            firstMinutesDigit = false;
+                            finalMinutesValue = concatenateDigits(finalMinutesValue, i);
+                            mMinutesView.setText(String.valueOf(finalMinutesValue));
+                        }
+                    } else if (mSecondsView.isSelected()) {
+                        if (!firstSecondsDigit) {
+                            firstSecondsDigit = true;
+                            finalSecondsValue = i;
+                            mSecondsView.setText(String.format("%02d", finalSecondsValue));
+                        } else {
+                            firstSecondsDigit = false;
+                            finalSecondsValue = concatenateDigits(finalSecondsValue, i);
+                            mSecondsView.setText(String.valueOf(finalSecondsValue));
+                        }
+                    }
+
                     return;
                 }
             }
         }
     };
+
+    public int concatenateDigits(int second, int first) {
+        return (second * 10) + first;
+    }
 
     View.OnClickListener timerTextViewListener = new View.OnClickListener() {
         @Override
@@ -137,11 +182,13 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         textView2.setTextColor(getColor(getContext(), R.color.Black_0_87));
     }
 
-    public static final int getColor(Context context, int id) {
+    @SuppressWarnings("deprecation")
+    public static int getColor(Context context, int id) {
         final int version = Build.VERSION.SDK_INT;
-        if (version >= 23) {
+        if (version >= Build.VERSION_CODES.M) {
             return ContextCompat.getColor(context, id);
         } else {
+            // getColor deprecated on Android Marshmallow(API 23)
             return context.getResources().getColor(id);
         }
     }
@@ -197,24 +244,6 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
 
         slidePanelUp.startAnimation(slideUp);
         slidePanelUp.setVisibility(View.VISIBLE);
-    }
-
-    public void WorkoutTimer(long millisUntilFinished) {
-        int countDownInterval = 1000;
-        new CountDownTimer(millisUntilFinished, countDownInterval) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                // Reset timer
-                // or run next timer
-                // (for now only reset timer)
-
-            }
-        }.start();
     }
 
     @Override
