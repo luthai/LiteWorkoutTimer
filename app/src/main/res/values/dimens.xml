@@ -22,6 +22,6 @@
     // Timer view
     <dimen name="timer_view_text_size">120sp</dimen>
     <dimen name="timer_view_padding">10dp</dimen>
-    <dimen name="timer_view_margin_top">120dp</dimen>
+    <dimen name="timer_view_margin_top">25dp</dimen>
 
 </resources>

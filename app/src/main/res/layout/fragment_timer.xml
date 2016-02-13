@@ -4,24 +4,23 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/fragment_timer_view"
-              android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/White">
 
     <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"/>
+    android:id="@+id/toolbar"
+    layout="@layout/toolbar"/>
 
     <include
-        android:id="@+id/digital_timer_view"
+        android:id="@+id/timer_clock_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/timer_view_margin_top"
+        android:layout_below="@id/toolbar"
         layout="@layout/digital_timer_view"/>
 
     <RelativeLayout
-        android:id="@+id/timer_button_bar"
+        android:id="@+id/timer_keypad_button_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

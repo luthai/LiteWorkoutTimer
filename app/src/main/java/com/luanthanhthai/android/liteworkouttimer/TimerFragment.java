@@ -21,8 +21,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.util.Stack;
-
 
 /**
  * Created by Thai on 15.01.2016.
@@ -32,6 +30,7 @@ import java.util.Stack;
 public class TimerFragment extends Fragment implements View.OnClickListener {
 
     private Button mPauseButton;
+    private ViewGroup timerClockView;
     private TextView mMinutesView;
     private TextView mSecondsView;
     private ViewGroup keypadPanel;
@@ -92,6 +91,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         // Keypad backspace button
         ImageButton mDelButton = (ImageButton) view.findViewById(R.id.button_del);
         mDelButton.setOnClickListener(this);
+
+        // Timer clock view
+        timerClockView = (ViewGroup) view.findViewById(R.id.timer_clock_view);
 
         // Digital timer view
         mMinutesView = (TextView) view.findViewById(R.id.timer_minutes_text_view);
@@ -203,12 +205,14 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             case R.id.button_start:
                 animSlidePanelDown(keypadPanel);
                 animSlidePanelUp(pauseBarPanel);
+                animSlideClockToCenter(timerClockView);
                 isRunning = true;
                 break;
 
             case R.id.button_rest:
                 animSlidePanelDown(keypadPanel);
                 animSlidePanelUp(pauseBarPanel);
+                animSlideClockToCenter(timerClockView);
                 isRunning = true;
                 break;
 
@@ -223,6 +227,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.button_reset:
+                animSlideClockUp(timerClockView);
                 animSlidePanelDown(pauseBarPanel);
                 animSlidePanelUp(keypadPanel);
                 mPauseButton.setVisibility(View.VISIBLE);
@@ -238,16 +243,24 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void animSlidePanelUp(ViewGroup slidePanelUp) {
-        Animation slideUp = AnimationUtils.loadAnimation(getContext(), R.anim.slide_bottom_up);
+    public void animSlideClockToCenter(ViewGroup slideClockToCenter) {
+        Animation slideToCenter = AnimationUtils.loadAnimation(getContext(), R.anim.timer_clock_slide_to_center);
+        slideClockToCenter.startAnimation(slideToCenter);
+    }
 
+    public void animSlideClockUp(ViewGroup slideClockUp) {
+        Animation slideLayoutUp = AnimationUtils.loadAnimation(getContext(), R.anim.timer_clock_slide_up);
+        slideClockUp.startAnimation(slideLayoutUp);
+    }
+
+    public void animSlidePanelUp(ViewGroup slidePanelUp) {
+        Animation slideUp = AnimationUtils.loadAnimation(getContext(), R.anim.panel_slide_up);
         slidePanelUp.startAnimation(slideUp);
         slidePanelUp.setVisibility(View.VISIBLE);
     }
 
     public void animSlidePanelDown(ViewGroup slidePanelDown) {
-        Animation slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.slide_bottom_down);
-
+        Animation slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.panel_slide_down);
         slidePanelDown.startAnimation(slideDown);
         slidePanelDown.setVisibility(View.GONE);
     }
