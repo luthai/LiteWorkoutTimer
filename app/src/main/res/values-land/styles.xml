@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="KeypadLayoutStyle" parent="MaterialTheme.Base">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/button_height_land</item>
+        <item name="android:textColor">@color/colorKeypadButtonText</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:layout_margin">@dimen/keypad_button_margins</item>
+        <item name="android:textSize">@dimen/keypad_button_text_size</item>
+    </style>
+
+    <style name="TimerButtons">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/button_height_land</item>
+        <item name="android:textSize">@dimen/timer_button_text_size</item>
+        <item name="android:textColor">@color/White</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="DigitalTimerView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/timer_view_text_size</item>
+        <item name="android:textColor">@color/Black_opacity_87</item>
+        <item name="android:clickable">true</item>
+    </style>
+</resources>

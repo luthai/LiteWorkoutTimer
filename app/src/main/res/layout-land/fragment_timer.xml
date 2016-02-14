@@ -12,16 +12,12 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar"/>
 
-    <TextView
-        android:id="@+id/timer_text"
+    <include
+        android:id="@+id/timer_clock_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:textColor="@color/Black_opacity_87"
-        android:text="Time"
-        android:textSize="55sp"/>
+        layout="@layout/digital_timer_view"/>
 
     <RelativeLayout
         android:id="@+id/timer_button_bar"
@@ -48,7 +44,6 @@
                 android:id="@+id/keypad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/keypad_bottom_margin"
                 layout="@layout/keypad"/>
 
             <include

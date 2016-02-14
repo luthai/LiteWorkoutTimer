@@ -24,7 +24,7 @@
 
     <style name="KeypadLayoutStyle" parent="MaterialTheme.Base">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">@dimen/button_height_port</item>
         <item name="android:textColor">@color/colorKeypadButtonText</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:layout_margin">@dimen/keypad_button_margins</item>
@@ -33,7 +33,7 @@
 
     <style name="TimerButtons">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">@dimen/button_height_port</item>
         <item name="android:textSize">@dimen/timer_button_text_size</item>
         <item name="android:textColor">@color/White</item>
         <item name="android:layout_weight">1</item>
