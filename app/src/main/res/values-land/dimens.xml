@@ -4,7 +4,26 @@
 
 <resources>
 
+    // Toolbar and menu
+    <dimen name="toolbar_elevation">4dp</dimen>
+    <dimen name="toolbar_title_inset_left">0dp</dimen>
+    <dimen name="toolbar_title_inset_start">16dp</dimen>
+
+    // Buttons general
+    <dimen name="button_height">36dp</dimen>
+
     // Keypad
-    <dimen name="button_height_land">36dp</dimen>
+    <dimen name="keypad_button_margins">5dp</dimen>
+    <dimen name="keypad_button_text_size">32sp</dimen>
+
+    // Timer buttons
+    <dimen name="timer_buttons_padding">8dp</dimen>
+    <dimen name="timer_buttons_layout_margin">0dp</dimen>
+    <dimen name="timer_button_text_size">16sp</dimen>
+
+    // Timer view
+    <dimen name="timer_view_text_size">120sp</dimen>
+    <dimen name="timer_view_padding">10dp</dimen>
+    <dimen name="timer_view_margin_top">0dp</dimen>
 
 </resources>

@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
+        android:layout_marginTop="@dimen/timer_view_margin_top"
         layout="@layout/digital_timer_view"/>
 
     <RelativeLayout
