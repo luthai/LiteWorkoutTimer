@@ -14,9 +14,10 @@
 
     <include
         android:id="@+id/timer_clock_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/timer_view_margin_top"
         layout="@layout/digital_timer_view"/>
 
     <RelativeLayout
