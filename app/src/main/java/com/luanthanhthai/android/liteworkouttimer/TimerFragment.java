@@ -158,13 +158,27 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             finalSecondsValue = i;
         } else {
             firstDigitHasValue = false;
-            finalSecondsValue = concatenateDigits(finalSecondsValue, i);
+            finalSecondsValue = checkValidValue(
+                    concatenateDigits(finalSecondsValue, i)
+            );
+
+            if (selectedTimerView == mMinutesView) {
+                selectTimerTextView(mSecondsView, mMinutesView);
+            }
         }
         selectedTimerView.setText(String.format("%02d", finalSecondsValue));
     }
 
     public int concatenateDigits(int second, int first) {
         return (second * 10) + first;
+    }
+
+    public int checkValidValue(int userInput) {
+        if (userInput < 60) {
+            return userInput;
+        } else {
+            return 59;
+        }
     }
 
     View.OnClickListener timerTextViewListener = new View.OnClickListener() {
