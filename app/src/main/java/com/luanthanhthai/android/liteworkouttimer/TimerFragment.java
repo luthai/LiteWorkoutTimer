@@ -21,6 +21,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.util.concurrent.TimeUnit;
+
 
 /**
  * Created by Thai on 15.01.2016.
@@ -30,9 +34,9 @@ import android.widget.TextView;
 public class TimerFragment extends Fragment implements View.OnClickListener {
 
     private Button mPauseButton;
-    private ViewGroup timerClockView;
     private TextView mMinutesView;
     private TextView mSecondsView;
+    private ViewGroup timerClockView;
     private ViewGroup keypadPanel;
     private ViewGroup pauseBarPanel;
     private int[] keypadButtons = {
@@ -57,15 +61,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         setRetainInstance(true);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_timer, container, false);
-
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.setSupportActionBar(toolbar);
-
+    public void configureTimerViews(View view) {
         // The sliding panels
         keypadPanel = (ViewGroup) view.findViewById(R.id.start_button_bar_with_keypad);
         pauseBarPanel = (ViewGroup) view.findViewById(R.id.pause_button_bar);
@@ -92,14 +88,26 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         ImageButton mDelButton = (ImageButton) view.findViewById(R.id.button_del);
         mDelButton.setOnClickListener(this);
 
-        // Timer clock view
-        timerClockView = (ViewGroup) view.findViewById(R.id.timer_clock_view);
-
         // Digital timer view
         mMinutesView = (TextView) view.findViewById(R.id.timer_minutes_text_view);
         mSecondsView = (TextView) view.findViewById(R.id.timer_seconds_text_view);
         mMinutesView.setOnClickListener(timerTextViewListener);
         mSecondsView.setOnClickListener(timerTextViewListener);
+
+        // Timer text view
+        timerClockView = (ViewGroup) view.findViewById(R.id.timer_clock_view);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_timer, container, false);
+
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.setSupportActionBar(toolbar);
+
+        configureTimerViews(view);
 
         // For backwards compatibility set this
         // near the end
@@ -108,20 +116,27 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    public void WorkoutTimer(long millisUntilFinished) {
+    //Clean code, make it DRY
+    public void workoutTimer(int minutesInput, int secondsInput) {
+        long millis = TimeUnit.MINUTES.toMillis(minutesInput) + TimeUnit.SECONDS.toMillis(secondsInput);
         int countDownInterval = 1000;
-        new CountDownTimer(millisUntilFinished, countDownInterval) {
+        new CountDownTimer(millis, countDownInterval) {
             @Override
             public void onTick(long millisUntilFinished) {
 
+                //Make code DRY, create convert methods
+                mMinutesView.setText(String.format("%02d",
+                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+                mSecondsView.setText(String.format("%02d",
+                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
+                        TimeUnit.MINUTES.toSeconds(
+                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
             }
 
             @Override
             public void onFinish() {
-                // Reset timer
-                // or run next timer
-                // (for now only reset timer)
-
+                timerReset();
+                // Put in timer stop in reset()
             }
         }.start();
     }
@@ -152,21 +167,46 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     };
 
-    public void setTimerClock(TextView selectedTimerView, boolean b, int i) {
-        if (b) {
+    public void setTimerClock(TextView selectedTimerView, boolean firstDigitEntered, int input) {
+        if (firstDigitEntered) {
             firstDigitHasValue = true;
-            finalSecondsValue = i;
+            setFirstDigit(selectedTimerView, input);
         } else {
             firstDigitHasValue = false;
-            finalSecondsValue = checkValidValue(
-                    concatenateDigits(finalSecondsValue, i)
-            );
+            setFinalValue(selectedTimerView, input);
 
             if (selectedTimerView == mMinutesView) {
                 selectTimerTextView(mSecondsView, mMinutesView);
             }
         }
-        selectedTimerView.setText(String.format("%02d", finalSecondsValue));
+
+        selectedTimerView.setText(String.format("%02d", getFinalValue(selectedTimerView)));
+    }
+
+    public void setFirstDigit(TextView selectedTimerView, int value) {
+        if (selectedTimerView == mMinutesView) {
+            finalMinutesValue = value;
+        } else {
+            finalSecondsValue = value;
+        }
+    }
+
+    public void setFinalValue(TextView selectedTimerView, int value) {
+        if (selectedTimerView == mMinutesView) {
+            finalMinutesValue = checkValidValue(
+                    concatenateDigits(finalMinutesValue, value));
+        } else {
+            finalSecondsValue = checkValidValue(
+                    concatenateDigits(finalSecondsValue, value));
+        }
+    }
+
+    public int getFinalValue(TextView selectedTimerView) {
+        if (selectedTimerView == mMinutesView) {
+            return finalMinutesValue;
+        } else {
+            return finalSecondsValue;
+        }
     }
 
     public int concatenateDigits(int second, int first) {
@@ -212,6 +252,16 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    public void timerReset() {
+        animSlideClockUp(timerClockView);
+        animSlidePanelDown(pauseBarPanel);
+        animSlidePanelUp(keypadPanel);
+        mPauseButton.setVisibility(View.VISIBLE);
+
+        mMinutesView.setText(String.format("%02d", finalMinutesValue));
+        mSecondsView.setText(String.format("%02d", finalSecondsValue));
+        isRunning = false;
+    }
 
     @Override
     public void onClick(View v) {
@@ -220,6 +270,8 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                 animSlidePanelDown(keypadPanel);
                 animSlidePanelUp(pauseBarPanel);
                 animSlideClockToCenter(timerClockView);
+
+                workoutTimer(finalMinutesValue, finalSecondsValue);
                 isRunning = true;
                 break;
 
@@ -241,11 +293,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.button_reset:
-                animSlideClockUp(timerClockView);
-                animSlidePanelDown(pauseBarPanel);
-                animSlidePanelUp(keypadPanel);
-                mPauseButton.setVisibility(View.VISIBLE);
-                isRunning = false;
+                timerReset();
                 break;
 
             case R.id.button_del:
