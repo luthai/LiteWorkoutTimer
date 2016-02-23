@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
 
@@ -46,10 +47,15 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                 R.id.button_9
     };
 
+    private MyTimer userInputTimer;
+    private final long countDownInterval = 100;
+    private int secondsLeft = 0;
+    private long totalMillis = 0;
     private int finalMinutesValue = 0;
     private int finalSecondsValue = 0;
     private boolean firstDigitHasValue = false;
     private boolean isRunning = false;
+
 
     public static TimerFragment newInstance() {
         return new TimerFragment();
@@ -116,21 +122,43 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    //Clean code, make it DRY
+    public class MyTimer extends CountDownTimer {
+        public MyTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            if (Math.round((float)millisUntilFinished / 1000.0f) != secondsLeft) {
+                secondsLeft = Math.round((float)millisUntilFinished / 1000.0f);
+
+                //mMinutesView.setText(String.format("%02d",
+                        //millisToMinutes(secondsLeft)));
+                //mSecondsView.setText(String.format("%02d",
+                        //getRemainderSeconds(secondsLeft)));
+                mSecondsView.setText(String.format("%02d", secondsLeft));
+            }
+        }
+
+        @Override
+        public void onFinish() {
+            timerReset();
+        }
+    }
+
+    //Old code will not use this??
     public void workoutTimer(int minutesInput, int secondsInput) {
-        long millis = TimeUnit.MINUTES.toMillis(minutesInput) + TimeUnit.SECONDS.toMillis(secondsInput);
+        totalMillis = clockTimeToMillis(minutesInput, secondsInput);
         int countDownInterval = 1000;
-        new CountDownTimer(millis, countDownInterval) {
+        new CountDownTimer(totalMillis, countDownInterval) {
             @Override
             public void onTick(long millisUntilFinished) {
 
                 //Make code DRY, create convert methods
                 mMinutesView.setText(String.format("%02d",
-                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+                        millisToMinutes(millisUntilFinished)));
                 mSecondsView.setText(String.format("%02d",
-                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
-                        TimeUnit.MINUTES.toSeconds(
-                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+                        getRemainderSeconds(millisUntilFinished)));
             }
 
             @Override
@@ -139,6 +167,21 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                 // Put in timer stop in reset()
             }
         }.start();
+    }
+
+    public long millisToMinutes(long millis) {
+        return TimeUnit.MILLISECONDS.toMinutes(millis);
+    }
+
+    // Millis to seconds - minutes to seconds
+    public long getRemainderSeconds(long millisUntilFinished) {
+        return TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
+               TimeUnit.MINUTES.toSeconds(millisToMinutes(millisUntilFinished));
+    }
+
+    public long clockTimeToMillis(int minutes, int seconds) {
+        return TimeUnit.MINUTES.toMillis(minutes) +
+               TimeUnit.SECONDS.toMillis(seconds);
     }
 
     View.OnClickListener keypadListener = new View.OnClickListener() {
@@ -180,6 +223,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             }
         }
 
+        totalMillis = clockTimeToMillis(finalMinutesValue, finalSecondsValue);
         selectedTimerView.setText(String.format("%02d", getFinalValue(selectedTimerView)));
     }
 
@@ -258,6 +302,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         animSlidePanelUp(keypadPanel);
         mPauseButton.setVisibility(View.VISIBLE);
 
+        userInputTimer.cancel();
         mMinutesView.setText(String.format("%02d", finalMinutesValue));
         mSecondsView.setText(String.format("%02d", finalSecondsValue));
         isRunning = false;
@@ -269,9 +314,11 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             case R.id.button_start:
                 animSlidePanelDown(keypadPanel);
                 animSlidePanelUp(pauseBarPanel);
-                animSlideClockToCenter(timerClockView);
+                //animSlideClockToCenter(timerClockView);
 
-                workoutTimer(finalMinutesValue, finalSecondsValue);
+                userInputTimer = new MyTimer(totalMillis, countDownInterval);
+                userInputTimer.start();
+                //workoutTimer(finalMinutesValue, finalSecondsValue);
                 isRunning = true;
                 break;
 
