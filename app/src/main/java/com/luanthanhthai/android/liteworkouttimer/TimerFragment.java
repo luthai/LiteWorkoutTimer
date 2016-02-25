@@ -146,15 +146,12 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    //Old code will not use this??
+    //Used for testing AccurateCountDownTimer.java
     public void workoutTimer(int minutesInput, int secondsInput) {
         totalMillis = clockTimeToMillis(minutesInput, secondsInput);
-        int countDownInterval = 1000;
-        new CountDownTimer(totalMillis, countDownInterval) {
+        new AccurateCountDownTimer(totalMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-
-                //Make code DRY, create convert methods
                 mMinutesView.setText(String.format("%02d",
                         millisToMinutes(millisUntilFinished)));
                 mSecondsView.setText(String.format("%02d",
@@ -302,7 +299,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         animSlidePanelUp(keypadPanel);
         mPauseButton.setVisibility(View.VISIBLE);
 
-        userInputTimer.cancel();
+        //userInputTimer.cancel();
         mMinutesView.setText(String.format("%02d", finalMinutesValue));
         mSecondsView.setText(String.format("%02d", finalSecondsValue));
         isRunning = false;
@@ -316,9 +313,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                 animSlidePanelUp(pauseBarPanel);
                 //animSlideClockToCenter(timerClockView);
 
-                userInputTimer = new MyTimer(totalMillis, countDownInterval);
-                userInputTimer.start();
-                //workoutTimer(finalMinutesValue, finalSecondsValue);
+                //userInputTimer = new MyTimer(totalMillis, countDownInterval);
+                //userInputTimer.start();
+                workoutTimer(finalMinutesValue, finalSecondsValue);
                 isRunning = true;
                 break;
 
