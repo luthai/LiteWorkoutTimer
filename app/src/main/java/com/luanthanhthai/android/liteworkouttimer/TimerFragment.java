@@ -146,10 +146,10 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    //Used for testing AccurateCountDownTimer.java
+    //Used for testing
     public void workoutTimer(int minutesInput, int secondsInput) {
         totalMillis = clockTimeToMillis(minutesInput, secondsInput);
-        new AccurateCountDownTimer(totalMillis, 1000) {
+        new CountDownTimer(totalMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 mMinutesView.setText(String.format("%02d",
