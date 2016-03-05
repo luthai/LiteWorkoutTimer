@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,9 +21,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
 
@@ -48,21 +44,22 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                 R.id.button_9
     };
 
-    private String FORMAT = "%02d";
-
     private MyTimer userInputTimer;
     private final long countDownInterval = 250;
-    private int secondsLeft = 0;
     private long totalMillis = 0;
     private long pausedMillis = 0;
     private int finalMinutesValue = 0;
     private int finalSecondsValue = 0;
 
-    private long timerRestMillis = 2 * 60 * 1000;
-
     private boolean firstDigitHasValue = false;
-    private boolean isRunning = false;
+    private boolean enableRepeat = true;
+    private boolean enableDelay = true;
+    private boolean isDelayRunning = false;
+    private boolean isTimerRunning = false;
+    private boolean isStartPressed = false;
 
+    private long timerRestMillis = 4 * 1000;
+    private long timerDelayMillis = 3 * 1000;
 
     public static TimerFragment newInstance() {
         return new TimerFragment();
@@ -129,7 +126,6 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    //private static final String TAG = "CountDown";
     public class MyTimer extends CountDownTimer {
         public MyTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
@@ -139,18 +135,28 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         public void onTick(long millisUntilFinished) {
             pausedMillis = millisUntilFinished;
 
+            String FORMAT = "%02d";
             mMinutesView.setText(String.format(FORMAT,
                     millisToMinutes(millisUntilFinished)));
             mSecondsView.setText(String.format(FORMAT,
                     getRemainderSeconds(millisUntilFinished)));
-
-            // for debugging
-            //Log.e(TAG, millisUntilFinished + " millisUntilFinished" + " (" + getRemainderSeconds(millisUntilFinished) + ")");
         }
 
         @Override
         public void onFinish() {
-            timerReset();
+            if (enableRepeat && isStartPressed) {
+                if (isTimerRunning) {
+                    isTimerRunning = false;
+                    isDelayRunning = true;
+                    setTimer(timerDelayMillis);
+                } else if (isDelayRunning) {
+                    isDelayRunning = false;
+                    isTimerRunning = true;
+                    setTimer(totalMillis);
+                }
+            } else {
+                timerReset();
+            }
         }
     }
 
@@ -313,14 +319,36 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    public void setTimer(long runTime) {
+        userInputTimer = new MyTimer(runTime, countDownInterval);
+        userInputTimer.start();
+    }
+
+    public void runTimer() {
+        if (isStartPressed) {
+            if (enableDelay) {
+                isDelayRunning = true;
+                isTimerRunning = false;
+                userInputTimer = new MyTimer(timerDelayMillis, countDownInterval);
+            } else {
+                isTimerRunning = true;
+                isDelayRunning = false;
+                userInputTimer = new MyTimer(totalMillis, countDownInterval);
+            }
+        } else {
+            userInputTimer = new MyTimer(timerRestMillis, countDownInterval);
+        }
+
+        userInputTimer.start();
+    }
+
     public void timerStart() {
         animSlidePanelDown(keypadPanel);
         animSlidePanelUp(pauseBarPanel);
         //animSlideClockToCenter(timerClockView);
 
-        userInputTimer = new MyTimer(totalMillis, countDownInterval);
-        userInputTimer.start();
-        isRunning = true;
+        isStartPressed = true;
+        runTimer();
     }
 
     public void timerRest() {
@@ -328,24 +356,20 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         animSlidePanelUp(pauseBarPanel);
         //animSlideClockToCenter(timerClockView);
 
-        userInputTimer = new MyTimer(timerRestMillis, countDownInterval);
-        userInputTimer.start();
-        isRunning = true;
+        isStartPressed = false;
+        runTimer();
     }
 
     public void timerPause() {
         mPauseButton.setVisibility(View.INVISIBLE);
 
         userInputTimer.cancel();
-        isRunning = false;
     }
 
     public void timerRestart() {
         mPauseButton.setVisibility(View.VISIBLE);
 
-        userInputTimer = new MyTimer(pausedMillis, countDownInterval);
-        userInputTimer.start();
-        isRunning = true;
+        setTimer(pausedMillis);
     }
 
     public void timerReset() {
@@ -357,7 +381,6 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         userInputTimer.cancel();
         mMinutesView.setText(String.format("%02d", finalMinutesValue));
         mSecondsView.setText(String.format("%02d", finalSecondsValue));
-        isRunning = false;
     }
 
     public void animSlideClockToCenter(ViewGroup slideClockToCenter) {
