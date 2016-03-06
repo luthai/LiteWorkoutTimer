@@ -371,6 +371,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         isStartPressed = false;
         runTimer();
         switchTimeColor(restColor);
+
     }
 
     public void timerPause() {
@@ -395,6 +396,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         mMinutesView.setText(String.format("%02d", finalMinutesValue));
         mSecondsView.setText(String.format("%02d", finalSecondsValue));
         switchTimeColor(timerColor);
+
+        mMinutesView.setSelected(false);
+        mSecondsView.setSelected(false);
     }
 
     public void animSlideClockToCenter(ViewGroup slideClockToCenter) {
