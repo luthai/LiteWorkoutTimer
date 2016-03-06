@@ -21,6 +21,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.concurrent.TimeUnit;
 
 
@@ -34,6 +36,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     private Button mPauseButton;
     private TextView mMinutesView;
     private TextView mSecondsView;
+    private TextView mColonView;
     private ViewGroup timerClockView;
     private ViewGroup keypadPanel;
     private ViewGroup pauseBarPanel;
@@ -50,12 +53,14 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     private long pausedMillis = 0;
     private int finalMinutesValue = 0;
     private int finalSecondsValue = 0;
+    private final int timerColor = R.color.Black_opacity_87;
+    private final int delayColor = R.color.Black_opacity_54;
+    private final int restColor = R.color.LightBlue_500;
 
     private boolean firstDigitHasValue = false;
     private boolean enableRepeat = true;
     private boolean enableDelay = true;
     private boolean isDelayRunning = false;
-    private boolean isTimerRunning = false;
     private boolean isStartPressed = false;
 
     private long timerRestMillis = 4 * 1000;
@@ -101,6 +106,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         // Digital timer view
         mMinutesView = (TextView) view.findViewById(R.id.timer_minutes_text_view);
         mSecondsView = (TextView) view.findViewById(R.id.timer_seconds_text_view);
+        mColonView = (TextView) view.findViewById(R.id.timer_colon_view);
         mMinutesView.setOnClickListener(timerTextViewListener);
         mSecondsView.setOnClickListener(timerTextViewListener);
 
@@ -145,19 +151,42 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onFinish() {
             if (enableRepeat && isStartPressed) {
-                if (isTimerRunning) {
-                    isTimerRunning = false;
+                if (isDelayRunning) {
+                    isDelayRunning = false;
+                    setTimer(totalMillis);
+                    switchTimeColor(timerColor);
+                } else {
                     isDelayRunning = true;
                     setTimer(timerDelayMillis);
-                } else if (isDelayRunning) {
-                    isDelayRunning = false;
-                    isTimerRunning = true;
-                    setTimer(totalMillis);
+                    switchTimeColor(delayColor);
                 }
             } else {
                 timerReset();
             }
         }
+    }
+
+    public void setTimer(long runTime) {
+        userInputTimer = new MyTimer(runTime, countDownInterval);
+        userInputTimer.start();
+    }
+
+    public void runTimer() {
+        if (isStartPressed) {
+            if (enableDelay) {
+                isDelayRunning = true;
+                userInputTimer = new MyTimer(timerDelayMillis, countDownInterval);
+                switchTimeColor(delayColor);
+            } else {
+                isDelayRunning = false;
+                userInputTimer = new MyTimer(totalMillis, countDownInterval);
+                switchTimeColor(timerColor);
+            }
+        } else {
+            userInputTimer = new MyTimer(timerRestMillis, countDownInterval);
+        }
+
+        userInputTimer.start();
     }
 
     public long millisToMinutes(long millis) {
@@ -271,9 +300,15 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     public void selectTimerTextView(TextView selectView, TextView deselectView) {
         selectView.setSelected(true);
         deselectView.setSelected(false);
-        selectView.setTextColor(getColor(getContext(), R.color.LightBlue_500));
-        deselectView.setTextColor(getColor(getContext(), R.color.Black_opacity_87));
+        selectView.setTextColor(getColor(getContext(), restColor));
+        deselectView.setTextColor(getColor(getContext(), timerColor));
         firstDigitHasValue = false;
+    }
+
+    public void switchTimeColor(int colorId) {
+        mMinutesView.setTextColor(getColor(getContext(), colorId));
+        mColonView.setTextColor(getColor(getContext(), colorId));
+        mSecondsView.setTextColor(getColor(getContext(), colorId));
     }
 
     @SuppressWarnings("deprecation")
@@ -319,29 +354,6 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void setTimer(long runTime) {
-        userInputTimer = new MyTimer(runTime, countDownInterval);
-        userInputTimer.start();
-    }
-
-    public void runTimer() {
-        if (isStartPressed) {
-            if (enableDelay) {
-                isDelayRunning = true;
-                isTimerRunning = false;
-                userInputTimer = new MyTimer(timerDelayMillis, countDownInterval);
-            } else {
-                isTimerRunning = true;
-                isDelayRunning = false;
-                userInputTimer = new MyTimer(totalMillis, countDownInterval);
-            }
-        } else {
-            userInputTimer = new MyTimer(timerRestMillis, countDownInterval);
-        }
-
-        userInputTimer.start();
-    }
-
     public void timerStart() {
         animSlidePanelDown(keypadPanel);
         animSlidePanelUp(pauseBarPanel);
@@ -358,6 +370,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
 
         isStartPressed = false;
         runTimer();
+        switchTimeColor(restColor);
     }
 
     public void timerPause() {
@@ -381,6 +394,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         userInputTimer.cancel();
         mMinutesView.setText(String.format("%02d", finalMinutesValue));
         mSecondsView.setText(String.format("%02d", finalSecondsValue));
+        switchTimeColor(timerColor);
     }
 
     public void animSlideClockToCenter(ViewGroup slideClockToCenter) {
