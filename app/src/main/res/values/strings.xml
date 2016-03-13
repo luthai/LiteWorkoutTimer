@@ -27,4 +27,7 @@
     <string name="reset_button">RESET</string>
     <string name="restart_button">RESTART</string>
 
+    // Icons
+    <string name="timer_repeat">repeat</string>
+
 </resources>

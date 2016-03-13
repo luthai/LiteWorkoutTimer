@@ -24,6 +24,9 @@
 
     // Timer view
     <dimen name="timer_view_text_size">120sp</dimen>
-    <dimen name="timer_view_margin_top">57dp</dimen>
+    <dimen name="timer_view_margin_top">85dp</dimen>
+
+    // Icons
+    <dimen name="button_size">48dp</dimen>
 
 </resources>

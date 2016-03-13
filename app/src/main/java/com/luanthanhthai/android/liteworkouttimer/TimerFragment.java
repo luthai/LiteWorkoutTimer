@@ -40,6 +40,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     private ViewGroup timerClockView;
     private ViewGroup keypadPanel;
     private ViewGroup pauseBarPanel;
+    private ImageButton mRepeatButton;
     private int[] keypadButtons = {
                 R.id.button_0, R.id.button_1, R.id.button_2,
                 R.id.button_3, R.id.button_4, R.id.button_5,
@@ -58,7 +59,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     private final int restColor = R.color.LightBlue_500;
 
     private boolean firstDigitHasValue = false;
-    private boolean enableRepeat = true;
+    private boolean enableRepeat;
     private boolean enableDelay = true;
     private boolean isDelayRunning = false;
     private boolean isStartPressed = false;
@@ -112,6 +113,10 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
 
         // Timer text view
         timerClockView = (ViewGroup) view.findViewById(R.id.timer_clock_view);
+
+        // Repeat icon
+        mRepeatButton = (ImageButton) view.findViewById(R.id.timer_repeat);
+        mRepeatButton.setOnClickListener(repeatButtonListener);
     }
 
     @Override
@@ -150,15 +155,25 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onFinish() {
-            if (enableRepeat && isStartPressed) {
-                if (isDelayRunning) {
-                    isDelayRunning = false;
-                    setTimer(totalMillis);
-                    switchTimeColor(timerColor);
+            if (isStartPressed) {
+                if (enableRepeat) {
+                    if (isDelayRunning) {
+                        isDelayRunning = false;
+                        setTimer(totalMillis);
+                        switchTimeColor(timerColor);
+                    } else {
+                        isDelayRunning = true;
+                        setTimer(timerDelayMillis);
+                        switchTimeColor(delayColor);
+                    }
                 } else {
-                    isDelayRunning = true;
-                    setTimer(timerDelayMillis);
-                    switchTimeColor(delayColor);
+                    if (isDelayRunning) {
+                        isDelayRunning = false;
+                        setTimer(totalMillis);
+                        switchTimeColor(timerColor);
+                    } else {
+                        timerReset();
+                    }
                 }
             } else {
                 timerReset();
@@ -203,6 +218,15 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         return TimeUnit.MINUTES.toMillis(minutes) +
                TimeUnit.SECONDS.toMillis(seconds);
     }
+
+    View.OnClickListener repeatButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            v.setSelected(!v.isSelected());
+
+            enableRepeat = v.isSelected();
+        }
+    };
 
     View.OnClickListener keypadListener = new View.OnClickListener() {
         @Override
