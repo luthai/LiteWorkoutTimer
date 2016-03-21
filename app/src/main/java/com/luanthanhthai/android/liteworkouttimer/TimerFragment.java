@@ -41,6 +41,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     private ViewGroup keypadPanel;
     private ViewGroup pauseBarPanel;
     private ImageButton mRepeatButton;
+    private ImageButton mBackspaceButton;
     private int[] keypadButtons = {
                 R.id.button_0, R.id.button_1, R.id.button_2,
                 R.id.button_3, R.id.button_4, R.id.button_5,
@@ -77,6 +78,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         setRetainInstance(true);
     }
 
+    /**
+     * All timer widgets initialized
+     */
     public void configureTimerViews(View view) {
         // The sliding panels
         keypadPanel = (ViewGroup) view.findViewById(R.id.start_button_bar_with_keypad);
@@ -100,9 +104,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             keypadButtonId.setOnClickListener(keypadListener);
         }
 
-        // Keypad backspace button
-        ImageButton mDelButton = (ImageButton) view.findViewById(R.id.button_del);
-        mDelButton.setOnClickListener(this);
+        // Backspace button
+        mBackspaceButton = (ImageButton) view.findViewById(R.id.button_backspace);
+        mBackspaceButton.setOnClickListener(keyBackspaceListener);
 
         // Digital timer view
         mMinutesView = (TextView) view.findViewById(R.id.timer_minutes_text_view);
@@ -137,6 +141,10 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    /**
+     * Timer class with onFinish algorithm,
+     * for running the timer accordingly when finished
+     */
     public class MyTimer extends CountDownTimer {
         public MyTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
@@ -181,11 +189,18 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Run timer according to inputted time
+     */
     public void setTimer(long runTime) {
         userInputTimer = new MyTimer(runTime, countDownInterval);
         userInputTimer.start();
     }
 
+    /**
+     * Run timer according to which button press,
+     * and if delay is enabled
+     */
     public void runTimer() {
         if (isStartPressed) {
             if (enableDelay) {
@@ -208,7 +223,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         return TimeUnit.MILLISECONDS.toMinutes(millis);
     }
 
-    // Millis to seconds - minutes to seconds
+    /**
+     * Seconds remain = Millis to seconds - minutes to seconds
+     */
     public long getRemainderSeconds(long millisUntilFinished) {
         return TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
                TimeUnit.MINUTES.toSeconds(millisToMinutes(millisUntilFinished));
@@ -228,6 +245,41 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     };
 
+    /**
+     * Backspace button,
+     * delete last entered digit
+     */
+    View.OnClickListener keyBackspaceListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (mMinutesView.isSelected()) {
+                if (finalMinutesValue < 10) {
+                    finalMinutesValue = 0;
+                    firstDigitHasValue = false;
+                    mMinutesView.setText(String.format("%02d", getFinalValue(mMinutesView)));
+                } else {
+                    finalMinutesValue = finalMinutesValue / 10;
+                    firstDigitHasValue = true;
+                    mMinutesView.setText(String.format("%02d", getFinalValue(mMinutesView)));
+                }
+            } else if (mSecondsView.isSelected()) {
+                if (finalSecondsValue < 10) {
+                    finalSecondsValue = 0;
+                    firstDigitHasValue = false;
+                    mSecondsView.setText(String.format("%02d", getFinalValue(mSecondsView)));
+                } else {
+                    finalSecondsValue = finalSecondsValue / 10;
+                    firstDigitHasValue = true;
+                    mSecondsView.setText(String.format("%02d", getFinalValue(mSecondsView)));
+                }
+            }
+        }
+    };
+
+    /**
+     * Keypad listener whether minutes or seconds is selected,
+     * and take in user inputted time and display it
+     */
     View.OnClickListener keypadListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -235,17 +287,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             for (int digit = 0; digit < keypadButtons.length; ++digit) {
                 if (selectedButton == keypadButtons[digit]) {
                     if (mMinutesView.isSelected()) {
-                        if (!firstDigitHasValue) {
-                            setTimerClock(mMinutesView, true, digit);
-                        } else {
-                            setTimerClock(mMinutesView, false, digit);
-                        }
+                        keypadTimerSet(mMinutesView, digit);
                     } else if (mSecondsView.isSelected()) {
-                        if (!firstDigitHasValue) {
-                            setTimerClock(mSecondsView, true, digit);
-                        } else {
-                            setTimerClock(mSecondsView, false, digit);
-                        }
+                        keypadTimerSet(mSecondsView, digit);
                     }
 
                     return;
@@ -254,6 +298,18 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     };
 
+    public void keypadTimerSet(TextView selectedTimerView, int digit) {
+        if (!firstDigitHasValue) {
+            setTimerClock(selectedTimerView, true, digit);
+        } else {
+            setTimerClock(selectedTimerView, false, digit);
+        }
+    }
+
+    /**
+     * Algorithm for user inputted digits,
+     * and save the total time
+     */
     public void setTimerClock(TextView selectedTimerView, boolean firstDigitEntered, int input) {
         if (firstDigitEntered) {
             firstDigitHasValue = true;
@@ -271,6 +327,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         selectedTimerView.setText(String.format("%02d", getFinalValue(selectedTimerView)));
     }
 
+    /**
+     * User entered the first digit
+     */
     public void setFirstDigit(TextView selectedTimerView, int value) {
         if (selectedTimerView == mMinutesView) {
             finalMinutesValue = value;
@@ -279,6 +338,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * User entered the second digit
+     */
     public void setFinalValue(TextView selectedTimerView, int value) {
         if (selectedTimerView == mMinutesView) {
             finalMinutesValue = checkValidValue(
@@ -289,6 +351,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Return final user entered time value
+     */
     public int getFinalValue(TextView selectedTimerView) {
         if (selectedTimerView == mMinutesView) {
             return finalMinutesValue;
@@ -297,10 +362,16 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Concatenate the first digit with the second digit
+     */
     public int concatenateDigits(int second, int first) {
         return (second * 10) + first;
     }
 
+    /**
+     * Check if user inputted value is less than 60
+     */
     public int checkValidValue(int userInput) {
         if (userInput < 60) {
             return userInput;
@@ -309,6 +380,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Listen to whether time minutes or seconds is selected
+     */
     View.OnClickListener timerTextViewListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -321,6 +395,10 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     };
 
+    /**
+     * Display selected time with color,
+     * and deselect the other
+     */
     public void selectTimerTextView(TextView selectView, TextView deselectView) {
         selectView.setSelected(true);
         deselectView.setSelected(false);
@@ -329,6 +407,10 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         firstDigitHasValue = false;
     }
 
+    /**
+     * Switch timer text color,
+     * for minutes, colon and seconds
+     */
     public void switchTimeColor(int colorId) {
         mMinutesView.setTextColor(getColor(getContext(), colorId));
         mColonView.setTextColor(getColor(getContext(), colorId));
@@ -367,10 +449,6 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
 
             case R.id.button_reset:
                 timerReset();
-                break;
-
-            case R.id.button_del:
-                // Backspace insert later
                 break;
 
             default:
@@ -425,22 +503,34 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         mSecondsView.setSelected(false);
     }
 
+    /**
+     * Animation for timer text slide to center
+     */
     public void animSlideClockToCenter(ViewGroup slideClockToCenter) {
         Animation slideToCenter = AnimationUtils.loadAnimation(getContext(), R.anim.timer_clock_slide_to_center);
         slideClockToCenter.startAnimation(slideToCenter);
     }
 
+    /**
+     * Animation for timer text slide back up to original place
+     */
     public void animSlideClockUp(ViewGroup slideClockUp) {
         Animation slideLayoutUp = AnimationUtils.loadAnimation(getContext(), R.anim.timer_clock_slide_up);
         slideClockUp.startAnimation(slideLayoutUp);
     }
 
+    /**
+     * Animation for keypad slide up from bottom
+     */
     public void animSlidePanelUp(ViewGroup slidePanelUp) {
         Animation slideUp = AnimationUtils.loadAnimation(getContext(), R.anim.panel_slide_up);
         slidePanelUp.startAnimation(slideUp);
         slidePanelUp.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Animation for keypad slide down and disappear
+     */
     public void animSlidePanelDown(ViewGroup slidePanelDown) {
         Animation slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.panel_slide_down);
         slidePanelDown.startAnimation(slideDown);
