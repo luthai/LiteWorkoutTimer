@@ -253,28 +253,27 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             if (mMinutesView.isSelected()) {
-                if (finalMinutesValue < 10) {
-                    finalMinutesValue = 0;
-                    firstDigitHasValue = false;
-                    mMinutesView.setText(String.format("%02d", getFinalValue(mMinutesView)));
-                } else {
-                    finalMinutesValue = finalMinutesValue / 10;
-                    firstDigitHasValue = true;
-                    mMinutesView.setText(String.format("%02d", getFinalValue(mMinutesView)));
-                }
+                backspaceCondition(mMinutesView);
             } else if (mSecondsView.isSelected()) {
-                if (finalSecondsValue < 10) {
-                    finalSecondsValue = 0;
-                    firstDigitHasValue = false;
-                    mSecondsView.setText(String.format("%02d", getFinalValue(mSecondsView)));
-                } else {
-                    finalSecondsValue = finalSecondsValue / 10;
-                    firstDigitHasValue = true;
-                    mSecondsView.setText(String.format("%02d", getFinalValue(mSecondsView)));
-                }
+                backspaceCondition(mSecondsView);
             }
         }
     };
+
+    /**
+     * Algorithm for backspace button
+     */
+    public void backspaceCondition(TextView selectedTextView) {
+        if (getFinalValue(selectedTextView) < 10) {
+            setFirstDigit(selectedTextView, 0);
+            firstDigitHasValue = false;
+        } else {
+            setFirstDigit(selectedTextView, getFinalValue(selectedTextView) / 10);
+            firstDigitHasValue = true;
+        }
+
+        selectedTextView.setText(String.format("%02d", getFinalValue(selectedTextView)));
+    }
 
     /**
      * Keypad listener whether minutes or seconds is selected,
