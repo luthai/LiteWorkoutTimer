@@ -90,7 +90,8 @@
         <Button
             android:id="@+id/button_empty"
             style="@style/KeypadLayoutStyle"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:clickable="false"/>
 
     </LinearLayout>
 

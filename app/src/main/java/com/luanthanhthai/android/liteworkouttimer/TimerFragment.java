@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class TimerFragment extends Fragment implements View.OnClickListener {
 
+    private Button mStartButton;
     private Button mPauseButton;
     private TextView mMinutesView;
     private TextView mSecondsView;
@@ -87,14 +88,14 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         pauseBarPanel = (ViewGroup) view.findViewById(R.id.pause_button_bar);
 
         // Timer buttons
-        Button startButton = (Button) view.findViewById(R.id.button_start);
-        startButton.setOnClickListener(this);
+        mStartButton = (Button) view.findViewById(R.id.button_start);
+        mStartButton.setOnClickListener(this);
         Button restButton = (Button) view.findViewById(R.id.button_rest);
         restButton.setOnClickListener(this);
         mPauseButton = (Button) view.findViewById(R.id.button_pause);
         mPauseButton.setOnClickListener(this);
-        Button restartButton = (Button) view.findViewById(R.id.button_restart);
-        restartButton.setOnClickListener(this);
+        Button remStartButton = (Button) view.findViewById(R.id.button_restart);
+        remStartButton.setOnClickListener(this);
         Button resetButton = (Button) view.findViewById(R.id.button_reset);
         resetButton.setOnClickListener(this);
 
@@ -133,6 +134,8 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         activity.setSupportActionBar(toolbar);
 
         configureTimerViews(view);
+
+        disableStartButton();
 
         // For backwards compatibility set this
         // near the end
@@ -335,6 +338,8 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         } else {
             finalSecondsValue = value;
         }
+
+        disableStartButton();
     }
 
     /**
@@ -348,6 +353,8 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             finalSecondsValue = checkValidValue(
                     concatenateDigits(finalSecondsValue, value));
         }
+
+        disableStartButton();
     }
 
     /**
@@ -424,6 +431,20 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         } else {
             // getColor deprecated on Android Marshmallow(API 23)
             return context.getResources().getColor(id);
+        }
+    }
+
+    /**
+     * Disable/enable start button,
+     * when timer condition is met
+     */
+    public void disableStartButton() {
+        if (finalMinutesValue == 0 && finalSecondsValue == 0) {
+            mStartButton.setClickable(false);
+            mStartButton.setBackgroundColor(getColor(getContext(), R.color.Black_opacity_38));
+        } else {
+            mStartButton.setClickable(true);
+            mStartButton.setBackgroundColor(getColor(getContext(), R.color.Green_500));
         }
     }
 
