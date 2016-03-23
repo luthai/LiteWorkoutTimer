@@ -66,8 +66,8 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     private boolean isDelayRunning = false;
     private boolean isStartPressed = false;
 
-    private long timerRestMillis = 4 * 1000;
-    private long timerDelayMillis = 3 * 1000;
+    private long timerRestMillis = 2 * 60 * 1000;
+    private long timerDelayMillis = 15 * 1000;
 
     public static TimerFragment newInstance() {
         return new TimerFragment();
@@ -435,6 +435,24 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
+     * Disable clickable timer clock,
+     * when timer is running
+     */
+    public void disableClickableTimer() {
+        mMinutesView.setClickable(false);
+        mSecondsView.setClickable(false);
+    }
+
+    /**
+     * Enable clickable timer clock,
+     * when timer ends
+     */
+    public void enableClickableTimer() {
+        mMinutesView.setClickable(true);
+        mSecondsView.setClickable(true);
+    }
+
+    /**
      * Disable/enable start button,
      * when timer condition is met
      */
@@ -453,10 +471,12 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.button_start:
                 timerStart();
+                disableClickableTimer();
                 break;
 
             case R.id.button_rest:
                 timerRest();
+                disableClickableTimer();
                 break;
 
             case R.id.button_pause:
@@ -518,6 +538,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         mMinutesView.setText(String.format("%02d", finalMinutesValue));
         mSecondsView.setText(String.format("%02d", finalSecondsValue));
         switchTimeColor(timerColor);
+        enableClickableTimer();
 
         mMinutesView.setSelected(false);
         mSecondsView.setSelected(false);
