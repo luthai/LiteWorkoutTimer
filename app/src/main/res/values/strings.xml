@@ -30,4 +30,9 @@
     // Icons
     <string name="timer_repeat">repeat</string>
 
+    // Timer clock view
+    <string name="minutes_text">00</string>
+    <string name="colon_text">:</string>
+    <string name="seconds_text">00</string>
+
 </resources>

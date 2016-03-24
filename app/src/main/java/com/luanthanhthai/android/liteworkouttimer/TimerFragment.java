@@ -9,20 +9,20 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
 import java.util.concurrent.TimeUnit;
 
 
@@ -41,8 +41,6 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     private ViewGroup timerClockView;
     private ViewGroup keypadPanel;
     private ViewGroup pauseBarPanel;
-    private ImageButton mRepeatButton;
-    private ImageButton mBackspaceButton;
     private int[] keypadButtons = {
                 R.id.button_0, R.id.button_1, R.id.button_2,
                 R.id.button_3, R.id.button_4, R.id.button_5,
@@ -62,12 +60,15 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
 
     private boolean firstDigitHasValue = false;
     private boolean enableRepeat;
-    private boolean enableDelay = true;
+    private boolean enableDelay;
     private boolean isDelayRunning = false;
     private boolean isStartPressed = false;
 
-    private long timerRestMillis = 2 * 60 * 1000;
-    private long timerDelayMillis = 15 * 1000;
+    private long timerDelayMillis = 3 * 1000;
+
+    private float yOriginalValue;
+    private float yCenterValue;
+
 
     public static TimerFragment newInstance() {
         return new TimerFragment();
@@ -106,8 +107,8 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
 
         // Backspace button
-        mBackspaceButton = (ImageButton) view.findViewById(R.id.button_backspace);
-        mBackspaceButton.setOnClickListener(keyBackspaceListener);
+        ImageButton backspaceButton = (ImageButton) view.findViewById(R.id.button_backspace);
+        backspaceButton.setOnClickListener(keyBackspaceListener);
 
         // Digital timer view
         mMinutesView = (TextView) view.findViewById(R.id.timer_minutes_text_view);
@@ -118,10 +119,11 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
 
         // Timer text view
         timerClockView = (ViewGroup) view.findViewById(R.id.timer_clock_view);
+        timerClockView.getViewTreeObserver().addOnGlobalLayoutListener(new MyGlobalListenerClass());
 
         // Repeat icon
-        mRepeatButton = (ImageButton) view.findViewById(R.id.timer_repeat);
-        mRepeatButton.setOnClickListener(repeatButtonListener);
+        ImageButton repeatButton = (ImageButton) view.findViewById(R.id.timer_repeat);
+        repeatButton.setOnClickListener(repeatButtonListener);
     }
 
     @Override
@@ -136,12 +138,24 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         configureTimerViews(view);
 
         disableStartButton();
+        enableDelay = true;
 
         // For backwards compatibility set this
         // near the end
         setHasOptionsMenu(true);
 
         return view;
+    }
+
+    /**
+     * Initialize y coordinates for sliding animation
+     */
+    class MyGlobalListenerClass implements ViewTreeObserver.OnGlobalLayoutListener {
+        @Override
+        public void onGlobalLayout() {
+            yOriginalValue = timerClockView.getY();
+            yCenterValue = calcCenterYValue();
+        }
     }
 
     /**
@@ -216,6 +230,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                 switchTimeColor(timerColor);
             }
         } else {
+            long timerRestMillis = 2 * 60 * 1000;
             userInputTimer = new MyTimer(timerRestMillis, countDownInterval);
         }
 
@@ -499,7 +514,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     public void timerStart() {
         animSlidePanelDown(keypadPanel);
         animSlidePanelUp(pauseBarPanel);
-        //animSlideClockToCenter(timerClockView);
+        animSlideClockToCenter();
 
         isStartPressed = true;
         runTimer();
@@ -508,7 +523,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     public void timerRest() {
         animSlidePanelDown(keypadPanel);
         animSlidePanelUp(pauseBarPanel);
-        //animSlideClockToCenter(timerClockView);
+        animSlideClockToCenter();
 
         isStartPressed = false;
         runTimer();
@@ -529,7 +544,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     }
 
     public void timerReset() {
-        animSlideClockUp(timerClockView);
+        animSlideClockUp();
         animSlidePanelDown(pauseBarPanel);
         animSlidePanelUp(keypadPanel);
         mPauseButton.setVisibility(View.VISIBLE);
@@ -545,19 +560,39 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * Animation for timer text slide to center
+     * Calculate y slide to center value,
+     * actually 75% of timer clock view above center
      */
-    public void animSlideClockToCenter(ViewGroup slideClockToCenter) {
-        Animation slideToCenter = AnimationUtils.loadAnimation(getContext(), R.anim.timer_clock_slide_to_center);
-        slideClockToCenter.startAnimation(slideToCenter);
+    public float calcCenterYValue() {
+        return (getScreenHeight() / 2) - (timerClockView.getHeight() * 0.75f);
     }
 
     /**
-     * Animation for timer text slide back up to original place
+     * Get screen center height
      */
-    public void animSlideClockUp(ViewGroup slideClockUp) {
-        Animation slideLayoutUp = AnimationUtils.loadAnimation(getContext(), R.anim.timer_clock_slide_up);
-        slideClockUp.startAnimation(slideLayoutUp);
+    public int getScreenHeight() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = getActivity().getWindowManager();
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+
+        return metrics.heightPixels;
+    }
+
+    /**
+     * Property Animation
+     * Animation for timer text slide to center
+     */
+    public void animSlideClockToCenter() {
+
+        timerClockView.animate().y(yCenterValue);
+    }
+
+    /**
+     * Property Animation
+     * Animation for timer clock slide up to original position
+     */
+    public void animSlideClockUp() {
+        timerClockView.animate().y(yOriginalValue);
     }
 
     /**
