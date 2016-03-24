@@ -66,6 +66,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
 
     private long timerDelayMillis = 3 * 1000;
 
+    private final int animTimerDuration = 500;
     private float yOriginalValue;
     private float yCenterValue;
 
@@ -153,6 +154,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     class MyGlobalListenerClass implements ViewTreeObserver.OnGlobalLayoutListener {
         @Override
         public void onGlobalLayout() {
+            // Remove the ViewTree
+            timerClockView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
             yOriginalValue = timerClockView.getY();
             yCenterValue = calcCenterYValue();
         }
@@ -583,7 +587,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
      * Animation for timer text slide to center
      */
     public void animSlideClockToCenter() {
-
+        timerClockView.animate().setDuration(animTimerDuration);
         timerClockView.animate().y(yCenterValue);
     }
 
@@ -592,6 +596,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
      * Animation for timer clock slide up to original position
      */
     public void animSlideClockUp() {
+        timerClockView.animate().setDuration(animTimerDuration);
         timerClockView.animate().y(yOriginalValue);
     }
 
