@@ -1,6 +1,7 @@
 package com.luanthanhthai.android.liteworkouttimer;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -10,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -157,8 +159,40 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             // Remove the ViewTree
             timerClockView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-            yOriginalValue = timerClockView.getY();
-            yCenterValue = calcCenterYValue();
+            Log.d("ADebugTag", "YScreenheight: " + String.valueOf(getScreenHeight()));
+            Log.d("ADebugTag", "YCenterValue: " + String.valueOf(calcCenterYValue()));
+            /*
+            Log.d("ADebugTag", "Width: "    + String.valueOf(timerClockView.getWidth()));
+            Log.d("ADebugTag", "Height: "   + String.valueOf(timerClockView.getHeight()));
+            Log.d("ADebugTag", "Top: "      + String.valueOf(timerClockView.getTop()));
+            Log.d("ADebugTag", "Bottom: "   + String.valueOf(timerClockView.getBottom()));
+            Log.d("ADebugTag", "Y: "        + String.valueOf(timerClockView.getY()));
+            Log.d("ADebugTag", "X: "        + String.valueOf(timerClockView.getX()));
+            */
+
+            if (getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
+                yOriginalValue = timerClockView.getY();
+                yCenterValue = calcCenterYValue();
+            } else {
+                yOriginalValue = timerClockView.getY();
+                yCenterValue = calcCenterYValue();
+            }
+        }
+    }
+
+    /**
+     * Get orientation of device
+     */
+    public int getOrientation() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager)
+                getContext().getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+
+        if (metrics.widthPixels < metrics.heightPixels) {
+            return Configuration.ORIENTATION_PORTRAIT;
+        } else {
+            return Configuration.ORIENTATION_LANDSCAPE;
         }
     }
 
@@ -564,11 +598,16 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * Calculate y slide to center value,
-     * actually 75% of timer clock view above center
+     * Calculate y slide to center value
+     * Portrait: 75% of timer clock view above center
+     * Landscape: 50% of timer clock view above center
      */
     public float calcCenterYValue() {
-        return (getScreenHeight() / 2) - (timerClockView.getHeight() * 0.75f);
+        if (getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
+            return (getScreenHeight() / 2) - (timerClockView.getHeight() * 0.75f);
+        } else  {
+            return (getScreenHeight() / 2) - (timerClockView.getHeight() / 2);
+        }
     }
 
     /**
@@ -588,7 +627,12 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
      */
     public void animSlideClockToCenter() {
         timerClockView.animate().setDuration(animTimerDuration);
-        timerClockView.animate().y(yCenterValue);
+        if (getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
+            timerClockView.animate().y(yCenterValue);
+        } else {
+            timerClockView.animate().y(yCenterValue);
+        }
+
     }
 
     /**
@@ -597,7 +641,13 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
      */
     public void animSlideClockUp() {
         timerClockView.animate().setDuration(animTimerDuration);
-        timerClockView.animate().y(yOriginalValue);
+
+        if (getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
+            timerClockView.animate().y(yOriginalValue);
+        } else {
+            timerClockView.animate().y(yOriginalValue);
+        }
+
     }
 
     /**
