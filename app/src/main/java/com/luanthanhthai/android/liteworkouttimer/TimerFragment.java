@@ -1,5 +1,7 @@
 package com.luanthanhthai.android.liteworkouttimer;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -159,9 +161,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             // Remove the ViewTree
             timerClockView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
+            /*
             Log.d("ADebugTag", "YScreenheight: " + String.valueOf(getScreenHeight()));
             Log.d("ADebugTag", "YCenterValue: " + String.valueOf(calcCenterYValue()));
-            /*
             Log.d("ADebugTag", "Width: "    + String.valueOf(timerClockView.getWidth()));
             Log.d("ADebugTag", "Height: "   + String.valueOf(timerClockView.getHeight()));
             Log.d("ADebugTag", "Top: "      + String.valueOf(timerClockView.getTop()));
@@ -600,13 +602,13 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     /**
      * Calculate y slide to center value
      * Portrait: 75% of timer clock view above center
-     * Landscape: 50% of timer clock view above center
+     * Landscape: 60% of timer clock view above center
      */
     public float calcCenterYValue() {
         if (getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
             return (getScreenHeight() / 2) - (timerClockView.getHeight() * 0.75f);
         } else  {
-            return (getScreenHeight() / 2) - (timerClockView.getHeight() / 2);
+            return (getScreenHeight() / 2) - (timerClockView.getHeight() * 0.60f);
         }
     }
 
@@ -627,10 +629,19 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
      */
     public void animSlideClockToCenter() {
         timerClockView.animate().setDuration(animTimerDuration);
+
         if (getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
             timerClockView.animate().y(yCenterValue);
         } else {
+            ObjectAnimator scaleUpY = ObjectAnimator.ofFloat(timerClockView, "scaleY", 1.5f);
+            ObjectAnimator scaleUpX = ObjectAnimator.ofFloat(timerClockView, "scaleX", 1.5f);
+            scaleUpY.setDuration(animTimerDuration);
+            scaleUpX.setDuration(animTimerDuration);
+            AnimatorSet scaleUp = new AnimatorSet();
+            scaleUp.play(scaleUpX).with(scaleUpY);
+
             timerClockView.animate().y(yCenterValue);
+            scaleUp.start();
         }
 
     }
@@ -642,10 +653,19 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     public void animSlideClockUp() {
         timerClockView.animate().setDuration(animTimerDuration);
 
+
         if (getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
             timerClockView.animate().y(yOriginalValue);
         } else {
+            ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(timerClockView, "scaleY", 1f);
+            ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(timerClockView, "scaleX", 1f);
+            scaleDownY.setDuration(animTimerDuration);
+            scaleDownX.setDuration(animTimerDuration);
+            AnimatorSet scaleDown = new AnimatorSet();
+            scaleDown.play(scaleDownX).with(scaleDownY);
+
             timerClockView.animate().y(yOriginalValue);
+            scaleDown.start();
         }
 
     }
