@@ -27,6 +27,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 
@@ -73,6 +75,8 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     private final int animTimerDuration = 500;
     private float yOriginalValue;
     private float yCenterValue;
+
+    final String FORMAT = "%02d";
 
 
     public static TimerFragment newInstance() {
@@ -153,6 +157,16 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
+     * Pause activity
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+
+
+    }
+
+    /**
      * Initialize y coordinates for sliding animation
      */
     class MyGlobalListenerClass implements ViewTreeObserver.OnGlobalLayoutListener {
@@ -211,10 +225,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         public void onTick(long millisUntilFinished) {
             pausedMillis = millisUntilFinished;
 
-            String FORMAT = "%02d";
-            mMinutesView.setText(String.format(FORMAT,
+            mMinutesView.setText(String.format(Locale.getDefault(),FORMAT,
                     millisToMinutes(millisUntilFinished)));
-            mSecondsView.setText(String.format(FORMAT,
+            mSecondsView.setText(String.format(Locale.getDefault(),FORMAT,
                     getRemainderSeconds(millisUntilFinished)));
         }
 
@@ -330,7 +343,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             firstDigitHasValue = true;
         }
 
-        selectedTextView.setText(String.format("%02d", getFinalValue(selectedTextView)));
+        selectedTextView.setText(String.format(Locale.getDefault(), FORMAT, getFinalValue(selectedTextView)));
     }
 
     /**
@@ -381,7 +394,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
 
         totalMillis = clockTimeToMillis(finalMinutesValue, finalSecondsValue);
-        selectedTimerView.setText(String.format("%02d", getFinalValue(selectedTimerView)));
+        selectedTimerView.setText(String.format(Locale.getDefault(), FORMAT, getFinalValue(selectedTimerView)));
     }
 
     /**
@@ -590,8 +603,8 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         mPauseButton.setVisibility(View.VISIBLE);
 
         userInputTimer.cancel();
-        mMinutesView.setText(String.format("%02d", finalMinutesValue));
-        mSecondsView.setText(String.format("%02d", finalSecondsValue));
+        mMinutesView.setText(String.format(Locale.getDefault(), FORMAT, finalMinutesValue));
+        mSecondsView.setText(String.format(Locale.getDefault(), FORMAT, finalSecondsValue));
         switchTimeColor(timerColor);
         enableClickableTimer();
 
