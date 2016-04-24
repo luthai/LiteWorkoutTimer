@@ -134,6 +134,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         // Repeat icon
         ImageButton repeatButton = (ImageButton) view.findViewById(R.id.timer_repeat);
         repeatButton.setOnClickListener(repeatButtonListener);
+        repeatButton.setSelected(enableRepeat);
     }
 
     @Override
@@ -145,16 +146,36 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
 
+        enableDelay = true;
+        if (savedInstanceState != null) {
+            enableRepeat = savedInstanceState.getBoolean("REPEAT_STATE");
+            finalMinutesValue = savedInstanceState.getInt("MINUTES_TIME");
+            finalSecondsValue = savedInstanceState.getInt("SECONDS_TIME");
+        }
+
         configureTimerViews(view);
 
+        setTimerText(mMinutesView, finalMinutesValue);
+        setTimerText(mSecondsView, finalSecondsValue);
         disableStartButton();
-        enableDelay = true;
 
         // For backwards compatibility set this
         // near the end
         setHasOptionsMenu(true);
 
         return view;
+    }
+
+    /**
+     * Save instance state
+     */
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putBoolean("REPEAT_STATE", enableRepeat);
+        savedInstanceState.putInt("MINUTES_TIME", finalMinutesValue);
+        savedInstanceState.putInt("SECONDS_TIME", finalSecondsValue);
+
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     /**
@@ -188,14 +209,16 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             Log.d("ADebugTag", "Y: "        + String.valueOf(timerClockView.getY()));
             Log.d("ADebugTag", "X: "        + String.valueOf(timerClockView.getX()));
             */
-
+            yOriginalValue = timerClockView.getY();
+            yCenterValue = calcCenterYValue();
+            /*
             if (getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
                 yOriginalValue = timerClockView.getY();
                 yCenterValue = calcCenterYValue();
             } else {
                 yOriginalValue = timerClockView.getY();
                 yCenterValue = calcCenterYValue();
-            }
+            }*/
         }
     }
 
