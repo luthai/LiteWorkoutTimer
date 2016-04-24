@@ -4,6 +4,8 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -70,6 +72,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     private boolean isDelayRunning = false;
     private boolean isStartPressed = false;
     private boolean timerIsRunning = false;
+    private int beepFlag = 2;
 
     private long timerDelayMillis = 3 * 1000;
 
@@ -253,6 +256,25 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
 
             setTimerText(mMinutesView, millisToMinutes(millisUntilFinished));
             setTimerText(mSecondsView, getRemainderSeconds(millisUntilFinished));
+
+            if (isDelayRunning) {
+                if (getRemainderSeconds(millisUntilFinished) == 2) {
+                    if (beepFlag == 2) {
+                        beepFlag--;
+                        countDownBeep(200);
+                    }
+                } else if (getRemainderSeconds(millisUntilFinished) == 1) {
+                    if (beepFlag == 1) {
+                        beepFlag--;
+                        countDownBeep(200);
+                    }
+                } else if (getRemainderSeconds(millisUntilFinished) == 0) {
+                    if (beepFlag == 0) {
+                        beepFlag = 2;
+                        countDownBeep(600);
+                    }
+                }
+            }
         }
 
         @Override
@@ -531,6 +553,14 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             // getColor deprecated on Android Marshmallow(API 23)
             return context.getResources().getColor(id);
         }
+    }
+
+    /**
+     * Sound beep
+     */
+    public void countDownBeep(int duration) {
+        ToneGenerator tg  = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+        tg.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, duration);
     }
 
     /**
