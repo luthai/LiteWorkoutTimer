@@ -12,14 +12,30 @@
     android:id="@+id/toolbar"
     layout="@layout/toolbar"/>
 
-    <ImageButton
-        android:id="@+id/timer_repeat"
-        android:layout_width="@dimen/button_size"
-        android:layout_height="@dimen/button_size"
-        android:layout_below="@id/toolbar"
-        android:src="@drawable/timer_repeat_button"
-        android:background="?android:selectableItemBackground"
-        android:contentDescription="@string/timer_repeat"/>
+    <LinearLayout
+        android:id="@+id/timer_icon_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/toolbar">
+
+        <ImageButton
+            android:id="@+id/timer_repeat"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:src="@drawable/timer_repeat_button"
+            android:background="?android:selectableItemBackground"
+            android:contentDescription="@string/timer_repeat"/>
+
+        <ImageButton
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:src="@drawable/timer_sound_button"
+            android:background="?android:selectableItemBackground"
+            android:contentDescription="@string/timer_sound"/>
+
+    </LinearLayout>
 
     <!-- Need to include this way -->
     <!-- to get rid of extra linearlayout, -->
@@ -29,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/timer_repeat">
+        android:layout_below="@id/timer_icon_bar">
         <include
             layout="@layout/digital_timer_view"/>
     </FrameLayout>
