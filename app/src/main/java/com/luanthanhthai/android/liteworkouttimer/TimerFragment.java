@@ -69,6 +69,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     private boolean firstDigitHasValue = false;
     private boolean enableRepeat;
     private boolean enableDelay;
+    private boolean enableSound;
     private boolean isDelayRunning = false;
     private boolean isStartPressed = false;
     private boolean timerIsRunning = false;
@@ -161,6 +162,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         setTimerText(mMinutesView, finalMinutesValue);
         setTimerText(mSecondsView, finalSecondsValue);
         disableStartButton();
+        enableSound = true;
 
         // For backwards compatibility set this
         // near the end
@@ -286,6 +288,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                         setTimer(totalMillis);
                         switchTimeColor(timerColor);
                     } else {
+                        countDownBeep(400);
                         isDelayRunning = true;
                         setTimer(timerDelayMillis);
                         switchTimeColor(delayColor);
@@ -296,10 +299,12 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                         setTimer(totalMillis);
                         switchTimeColor(timerColor);
                     } else {
+                        countDownBeep(600);
                         timerReset();
                     }
                 }
             } else {
+                countDownBeep(600);
                 timerReset();
             }
         }
@@ -559,8 +564,10 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
      * Sound beep
      */
     public void countDownBeep(int duration) {
-        ToneGenerator tg  = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
-        tg.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, duration);
+        if (enableSound) {
+            ToneGenerator tg  = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+            tg.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, duration);
+        }
     }
 
     /**
