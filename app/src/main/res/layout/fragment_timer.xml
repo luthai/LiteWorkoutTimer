@@ -29,6 +29,7 @@
             android:contentDescription="@string/timer_repeat"/>
 
         <ImageButton
+            android:id="@+id/timer_sound"
             android:layout_width="@dimen/button_size"
             android:layout_height="@dimen/button_size"
             android:src="@drawable/timer_sound_button"
@@ -37,7 +38,7 @@
 
     </LinearLayout>
 
-    <!-- Need to include this way -->
+    <!-- Need to include it this way -->
     <!-- to get rid of extra linearlayout, -->
     <!-- and remove the warning -->
     <FrameLayout

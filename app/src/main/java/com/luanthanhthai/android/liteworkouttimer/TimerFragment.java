@@ -139,6 +139,11 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         ImageButton repeatButton = (ImageButton) view.findViewById(R.id.timer_repeat);
         repeatButton.setOnClickListener(repeatButtonListener);
         repeatButton.setSelected(enableRepeat);
+
+        // Sound icon
+        ImageButton soundButton = (ImageButton) view.findViewById(R.id.timer_sound);
+        soundButton.setOnClickListener(soundButtonListener);
+        soundButton.setSelected(enableSound);
     }
 
     @Override
@@ -153,6 +158,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         enableDelay = true;
         if (savedInstanceState != null) {
             enableRepeat = savedInstanceState.getBoolean("REPEAT_STATE");
+            enableSound = savedInstanceState.getBoolean("SOUND_STATE");
             finalMinutesValue = savedInstanceState.getInt("MINUTES_TIME");
             finalSecondsValue = savedInstanceState.getInt("SECONDS_TIME");
         }
@@ -162,7 +168,6 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         setTimerText(mMinutesView, finalMinutesValue);
         setTimerText(mSecondsView, finalSecondsValue);
         disableStartButton();
-        enableSound = true;
 
         // For backwards compatibility set this
         // near the end
@@ -177,6 +182,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putBoolean("REPEAT_STATE", enableRepeat);
+        savedInstanceState.putBoolean("SOUND_STATE", enableSound);
         savedInstanceState.putInt("MINUTES_TIME", finalMinutesValue);
         savedInstanceState.putInt("SECONDS_TIME", finalSecondsValue);
 
@@ -365,12 +371,25 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                TimeUnit.SECONDS.toMillis(seconds);
     }
 
+    /**
+     * Repeat button listener
+     */
     View.OnClickListener repeatButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             v.setSelected(!v.isSelected());
-
             enableRepeat = v.isSelected();
+        }
+    };
+
+    /**
+     * Sound button listener
+     */
+    View.OnClickListener soundButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            v.setSelected(!v.isSelected());
+            enableSound = v.isSelected();
         }
     };
 
