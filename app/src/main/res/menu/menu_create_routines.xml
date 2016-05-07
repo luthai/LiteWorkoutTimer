@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_ic_add"
+        android:icon="@drawable/ic_add_white_48dp"
+        android:title="@string/menu_ic_add_routine"
+        app:showAsAction="ifRoom|withText"/>
+
+    <item
+        android:id="@+id/menu_ic_vertical"
+        android:icon="@drawable/ic_more_vert_white_48dp"
+        android:title="@string/menu_ic_vertical"
+        app:showAsAction="ifRoom|withText"/>
+
+</menu>

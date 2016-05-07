@@ -11,7 +11,8 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     app:titleTextAppearance="@style/Toolbar.TitleText"
     app:contentInsetLeft="@dimen/toolbar_title_inset_left"
-    app:contentInsetStart="@dimen/toolbar_title_inset_start"/>
+    app:contentInsetStart="@dimen/toolbar_title_inset_start">
+</android.support.v7.widget.Toolbar>
 
 
 

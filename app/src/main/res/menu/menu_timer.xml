@@ -8,13 +8,13 @@
     <item
         android:id="@+id/menu_ic_create_routine"
         android:icon="@drawable/ic_mode_edit_white_48dp"
-        android:title="@string/menu_ic_create_routine"
+        android:title="@string/toolbar_create_routines"
         app:showAsAction="ifRoom|withText"/>
 
     <item
         android:id="@+id/menu_ic_settings"
         android:icon="@drawable/ic_settings_white_48dp"
-        android:title="@string/menu_ic_settings"
+        android:title="@string/toolbar_settings"
         app:showAsAction="ifRoom|withText"/>
 
 </menu>

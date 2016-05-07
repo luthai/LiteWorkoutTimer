@@ -3,8 +3,14 @@
 
 <resources>
     <string name="app_name">LiteWorkoutTimer</string>
-    <string name="menu_ic_create_routine">Create routine</string>
-    <string name="menu_ic_settings">Settings</string>
+    <string name="toolbar_create_routines">Create routines</string>
+    <string name="toolbar_settings">Settings</string>
+
+    // Icons
+    <string name="timer_repeat">repeat</string>
+    <string name="timer_sound">timer_sound</string>
+    <string name="menu_ic_add_routine">Add routine</string>
+    <string name="menu_ic_vertical">Routine menu</string>
 
     // Keypad
     <string name="digit1">1</string>
@@ -26,10 +32,6 @@
     <string name="pause_button">PAUSE</string>
     <string name="reset_button">RESET</string>
     <string name="restart_button">RESTART</string>
-
-    // Icons
-    <string name="timer_repeat">repeat</string>
-    <string name="timer_sound">timer_sound</string>
 
     // Timer clock view
     <string name="minutes_text">00</string>
