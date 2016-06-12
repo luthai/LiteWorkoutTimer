@@ -11,7 +11,7 @@ public class Routine {
 
     private final UUID mId;
     private String mTitle;
-    private boolean mBoxChecked;
+    private boolean mChosen;
 
     public Routine() {
         this(UUID.randomUUID());
@@ -33,11 +33,11 @@ public class Routine {
         mTitle = title;
     }
 
-    public boolean isBoxChecked() {
-        return mBoxChecked;
+    public boolean isChosen() {
+        return mChosen;
     }
 
-    public void setBoxChecked(boolean boxChecked) {
-        mBoxChecked = boxChecked;
+    public void setChosen(boolean chosen) {
+        mChosen = chosen;
     }
 }

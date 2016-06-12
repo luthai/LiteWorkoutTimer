@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
  * Copyright (c) [2016] [Luan Thanh Thai]
  * See the file LICENSE.txt for copying permission
  */
-public abstract class SingleFragmentActivity extends FragmentActivity {
+public abstract class SingleFragmentActivity extends AppCompatActivity {
 
     protected abstract Fragment createFragment();
 
