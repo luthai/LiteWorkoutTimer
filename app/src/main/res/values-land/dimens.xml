@@ -25,4 +25,8 @@
     <dimen name="timer_view_text_size">100sp</dimen>
     <dimen name="timer_view_margin_top">57dp</dimen>
 
+    // List item
+    <dimen name="list_item_text_size">14sp</dimen>
+    <dimen name="list_item_text_caption">12sp</dimen>
+
 </resources>

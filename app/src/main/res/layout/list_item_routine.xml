@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal"
+              android:paddingStart="@dimen/list_relative_view_padding_left"
+              android:paddingEnd="@dimen/list_relative_view_padding_right"
+              android:paddingLeft="@dimen/list_relative_view_padding_left"
+              android:paddingRight="@dimen/list_relative_view_padding_right"
+              android:paddingTop="@dimen/list_relative_view_padding_top"
+              android:paddingBottom="@dimen/list_relative_view_padding_bottom">
+
+    <CheckBox
+        android:id="@+id/list_item_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/list_checkbox_margin_right"
+        android:layout_marginRight="@dimen/list_checkbox_margin_right"/>
+
+    <LinearLayout
+        android:id="@+id/list_item_routine_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toEndOf="@id/list_item_checkbox"
+        android:layout_toRightOf="@id/list_item_checkbox">
+
+        <TextView
+            android:id="@+id/list_item_routine_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            tools:text="Routine Title"
+            style="@style/ListItemText"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Routine Description"
+            android:textSize="@dimen/list_item_text_caption"
+            style="@style/ListItemText"/>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_create_black_48px"
+        style="@style/KeypadLayoutStyle"
+        android:contentDescription="@string/edit_routine"/>
+
+
+</RelativeLayout>

@@ -38,4 +38,8 @@
     <string name="colon_text">:</string>
     <string name="seconds_text">00</string>
 
+    // Create routine
+    <string name="edit_routine">edit routine</string>
+
+
 </resources>

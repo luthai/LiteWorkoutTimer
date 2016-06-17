@@ -47,5 +47,13 @@
         <item name="android:clickable">true</item>
     </style>
 
+    <style name="ListItemText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/list_item_text_size</item>
+        <item name="android:textColor">@color/Black_opacity_87</item>
+        <item name="android:clickable">true</item>
+    </style>
+
 
 </resources>
