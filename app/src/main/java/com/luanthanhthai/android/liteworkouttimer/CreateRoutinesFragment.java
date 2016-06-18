@@ -13,7 +13,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -61,13 +65,33 @@ public class CreateRoutinesFragment extends Fragment {
         mRoutineRecyclerView.setAdapter(mRoutineAdapter);
     }
 
-    private class RoutineHolder extends RecyclerView.ViewHolder {
-        public TextView mTitleTextView;
+    private class RoutineHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+        private Routine mRoutine;
+        private CheckBox mCheckedCheckBox;
+        private TextView mTitleTextView;
+        private TextView mDescrTextView;
 
         public RoutineHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+            mCheckedCheckBox = (CheckBox) itemView.findViewById(R.id.list_item_checkbox);
+            mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_routine_title);
+            mDescrTextView = (TextView) itemView.findViewById(R.id.list_item_routine_description);
+        }
 
-            mTitleTextView = (TextView) itemView;
+        public void bindRoutine(Routine routine) {
+            mRoutine = routine;
+            mCheckedCheckBox.setChecked(mRoutine.isChecked());
+            mTitleTextView.setText(mRoutine.getTitle());
+            mDescrTextView.setText(mRoutine.getDescription());
+        }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getActivity(),
+                    mRoutine.getTitle() + " clicked!", Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 
@@ -81,7 +105,7 @@ public class CreateRoutinesFragment extends Fragment {
         @Override
         public RoutineHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            View view = layoutInflater.inflate(R.layout.list_item_routine, parent, false);
 
             return new RoutineHolder(view);
         }
@@ -89,7 +113,7 @@ public class CreateRoutinesFragment extends Fragment {
         @Override
         public void onBindViewHolder(RoutineHolder holder, int position) {
             Routine routine = mRoutines.get(position);
-            holder.mTitleTextView.setText(routine.getTitle());
+            holder.bindRoutine(routine);
         }
 
         @Override

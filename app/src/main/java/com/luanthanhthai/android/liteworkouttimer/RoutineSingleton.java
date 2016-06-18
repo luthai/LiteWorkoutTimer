@@ -23,7 +23,8 @@ public class RoutineSingleton {
         for (int i = 0; i < 4; ++i) {
             Routine routine = new Routine();
             routine.setTitle("Routine #" + i);
-            routine.setChosen(i % 2 == 0);
+            routine.setDescription("Description #" + i);
+            routine.setChecked(i % 2 == 0);
             mRoutines.add(routine);
         }
     }
