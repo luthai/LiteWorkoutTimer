@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -46,6 +47,7 @@ public class CreateRoutinesFragment extends Fragment {
         activity.setSupportActionBar(toolbar);
 
         mRoutineRecyclerView = (RecyclerView) view.findViewById(R.id.create_routine_recycler);
+        mRoutineRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRoutineRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         updateUI();
