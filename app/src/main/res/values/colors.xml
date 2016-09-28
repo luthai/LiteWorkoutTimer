@@ -23,4 +23,7 @@
     <color name="Amber_600">#FFB300</color><!-- PauseButton -->
     <color name="Blue_900">#0D47A1</color><!-- ButtonPressed -->
 
+    // Recycler list view
+    <color name="RecyclerViewBackground">#eeeeeeff</color><!-- ListBackground -->
+
 </resources>

@@ -30,12 +30,12 @@
     <dimen name="button_size">48dp</dimen>
 
     // List item
-    <dimen name="list_relative_view_padding_left">8dp</dimen>
-    <dimen name="list_relative_view_padding_right">8dp</dimen>
-    <dimen name="list_relative_view_padding_top">5dp</dimen>
-    <dimen name="list_relative_view_padding_bottom">5dp</dimen>
+    <dimen name="list_view_padding_left">8dp</dimen>
+    <dimen name="list_view_padding_right">8dp</dimen>
+    <dimen name="list_view_padding_top">2dp</dimen>
+    <dimen name="list_view_padding_bottom">2dp</dimen>
     <dimen name="list_item_text_size">14sp</dimen>
     <dimen name="list_item_text_caption">12sp</dimen>
-    <dimen name="list_checkbox_margin_right">16dp</dimen>
+    <dimen name="list_checkbox_margin_right">8dp</dimen>
 
 </resources>

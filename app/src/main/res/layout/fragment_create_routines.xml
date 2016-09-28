@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/fragment_create_routines_view"
               android:orientation="vertical"
+              android:background="@color/RecyclerViewBackground"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
