@@ -41,5 +41,15 @@
     // Create routine
     <string name="edit_routine">edit routine</string>
 
+    // Settings
+    <string name="settings">Settings</string>
+    <string name="delay_start_time">Delay start time</string>
+    <string name="delay_time">Delay time</string>
+    <string name="rest_time">Rest time</string>
+    <string name="time_unit_second">s</string>
+    <string name="time_unit_minute">m</string>
+    <string name="default_time">00</string>
+
+
 
 </resources>

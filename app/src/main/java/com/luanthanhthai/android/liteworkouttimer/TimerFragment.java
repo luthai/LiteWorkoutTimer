@@ -254,7 +254,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
      * for running the timer accordingly when finished
      */
     public class MyTimer extends CountDownTimer {
-        public MyTimer(long millisInFuture, long countDownInterval) {
+        private MyTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
 
@@ -749,7 +749,6 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             timerClockView.animate().y(yCenterValue);
             scaleUp.start();
         }
-
     }
 
     /**
@@ -758,7 +757,6 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
      */
     public void animSlideClockUp() {
         timerClockView.animate().setDuration(animTimerDuration);
-
 
         if (getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
             timerClockView.animate().y(yOriginalValue);
@@ -773,7 +771,6 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             timerClockView.animate().y(yOriginalValue);
             scaleDown.start();
         }
-
     }
 
     /**

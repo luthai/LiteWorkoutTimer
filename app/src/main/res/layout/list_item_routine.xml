@@ -30,6 +30,16 @@
                 android:layout_marginEnd="@dimen/list_checkbox_margin_right"
                 android:layout_marginRight="@dimen/list_checkbox_margin_right"/>
 
+            <ImageButton
+                android:id="@+id/list_item_edit_routine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_create_black_48px"
+                android:contentDescription="@string/edit_routine"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                style="@style/ListItemImageButton"/>
+
             <LinearLayout
                 android:id="@+id/list_item_routine_text"
                 android:layout_width="wrap_content"
@@ -58,16 +68,6 @@
                     style="@style/ListItemText"/>
 
             </LinearLayout>
-
-            <ImageButton
-                android:id="@+id/list_item_edit_routine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_create_black_48px"
-                android:contentDescription="@string/edit_routine"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                style="@style/ListItemImageButton"/>
 
         </RelativeLayout>
 
