@@ -40,14 +40,10 @@
             android:layout_alignParentEnd="true">
 
             <EditText
-                android:layout_width="25dp"
-                android:layout_height="17dp"
-                android:padding="2dp"
-                android:textSize="@dimen/text_view_size"
-                android:inputType="number"
-                android:gravity="center"
-                android:textColor="@color/LightBlue_500"
-                android:text="@string/default_time"/>
+                android:id="@+id/delay_start_time_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TimerDigitsSettings"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -82,31 +78,21 @@
 
             <EditText
                 android:id="@+id/delay_time_m_edit"
-                android:layout_width="25dp"
-                android:layout_height="17dp"
-                android:padding="2dp"
-                android:textSize="@dimen/text_view_size"
-                android:inputType="number"
-                android:gravity="center"
-                android:textColor="@color/LightBlue_500"
-                android:text="@string/default_time"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TimerDigitsSettings"/>
 
             <TextView
-                android:id="@+id/delay_time_m_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_view_size"
                 android:text="@string/time_unit_minute"/>
 
             <EditText
-                android:layout_width="25dp"
-                android:layout_height="17dp"
-                android:padding="2dp"
-                android:textSize="@dimen/text_view_size"
-                android:inputType="number"
-                android:gravity="center"
-                android:textColor="@color/LightBlue_500"
-                android:text="@string/default_time"/>
+                android:id="@+id/delay_time_s_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TimerDigitsSettings"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -140,14 +126,10 @@
             android:layout_alignParentEnd="true">
 
             <EditText
-                android:layout_width="25dp"
-                android:layout_height="17dp"
-                android:padding="2dp"
-                android:textSize="@dimen/text_view_size"
-                android:inputType="number"
-                android:gravity="center"
-                android:textColor="@color/LightBlue_500"
-                android:text="@string/default_time"/>
+                android:id="@+id/rest_time_m_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TimerDigitsSettings"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -156,14 +138,10 @@
                 android:text="@string/time_unit_minute"/>
 
             <EditText
-                android:layout_width="25dp"
-                android:layout_height="17dp"
-                android:padding="2dp"
-                android:textSize="@dimen/text_view_size"
-                android:inputType="number"
-                android:gravity="center"
-                android:textColor="@color/LightBlue_500"
-                android:text="@string/default_time"/>
+                android:id="@+id/rest_time_s_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TimerDigitsSettings"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -184,6 +162,7 @@
         android:id="@+id/keypad_settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/keypad"/>
+        layout="@layout/keypad"
+        android:visibility="gone"/>
 
 </LinearLayout>

@@ -4,6 +4,6 @@
     <item android:drawable="@drawable/ic_replay_black_48px"
           android:state_selected="true"/>
     <item android:drawable="@drawable/ic_replay_black_48px"
-          android:state_pressed="true"/>
+          android:state_focused="true"/>
     <item android:drawable="@drawable/ic_replay_disable_black_48px"/>
 </selector>
