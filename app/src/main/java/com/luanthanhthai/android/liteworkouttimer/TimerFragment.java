@@ -15,7 +15,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,9 +61,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     private long pausedMillis = 0;
     private int finalMinutesValue = 0;
     private int finalSecondsValue = 0;
-    private final int timerColor = R.color.Black_opacity_87;
+    private final int timerInactiveColor = R.color.Black_opacity_87;
     private final int delayColor = R.color.Black_opacity_54;
-    private final int restColor = R.color.LightBlue_500;
+    private final int timerActiveColor = R.color.LightBlue_500;
 
     private boolean firstDigitHasValue = false;
     private boolean enableRepeat;
@@ -292,7 +291,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                     if (isDelayRunning) {
                         isDelayRunning = false;
                         setTimer(totalMillis);
-                        switchTimeColor(timerColor);
+                        switchTimeColor(timerInactiveColor);
                     } else {
                         countDownBeep(400);
                         isDelayRunning = true;
@@ -303,7 +302,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
                     if (isDelayRunning) {
                         isDelayRunning = false;
                         setTimer(totalMillis);
-                        switchTimeColor(timerColor);
+                        switchTimeColor(timerInactiveColor);
                     } else {
                         countDownBeep(600);
                         timerReset();
@@ -320,7 +319,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
      * Timer text update
      */
     public void setTimerText(TextView selectedTextView, long Millis) {
-        selectedTextView.setText(String.format(Locale.getDefault(),FORMAT, Millis));
+        selectedTextView.setText(String.format(Locale.getDefault(), FORMAT, Millis));
     }
 
     /**
@@ -344,7 +343,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             } else {
                 isDelayRunning = false;
                 userInputTimer = new MyTimer(totalMillis, countDownInterval);
-                switchTimeColor(timerColor);
+                switchTimeColor(timerInactiveColor);
             }
         } else {
             long timerRestMillis = 2 * 60 * 1000;
@@ -553,8 +552,8 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     public void selectTimerTextView(TextView selectView, TextView deselectView) {
         selectView.setSelected(true);
         deselectView.setSelected(false);
-        selectView.setTextColor(getColor(getContext(), restColor));
-        deselectView.setTextColor(getColor(getContext(), timerColor));
+        selectView.setTextColor(getColor(getContext(), timerActiveColor));
+        deselectView.setTextColor(getColor(getContext(), timerInactiveColor));
         firstDigitHasValue = false;
     }
 
@@ -669,7 +668,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         isStartPressed = false;
         timerIsRunning = true;
         runTimer();
-        switchTimeColor(restColor);
+        switchTimeColor(timerActiveColor);
 
     }
 
@@ -696,7 +695,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         userInputTimer.cancel();
         setTimerText(mMinutesView, finalMinutesValue);
         setTimerText(mSecondsView, finalSecondsValue);
-        switchTimeColor(timerColor);
+        switchTimeColor(timerInactiveColor);
         enableClickableTimer();
 
         mMinutesView.setSelected(false);

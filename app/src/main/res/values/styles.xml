@@ -72,6 +72,7 @@
         <item name="android:inputType">number</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:focusable">false</item>
+        <item name="android:clickable">true</item>
     </style>
 
 

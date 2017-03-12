@@ -6,10 +6,10 @@
               android:layout_height="match_parent">
 
     <include
-        layout="@layout/timer_settings"/>
-
-    <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar"/>
+
+    <include
+        layout="@layout/timer_settings"/>
 
 </LinearLayout>
