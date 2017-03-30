@@ -15,11 +15,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 /**
- * Created by Thai on 03.02.2016.
- *
+ * Created by Thai on 03.02.2017.
+ * Copyright (c) [2016] [Luan Thanh Thai]
+ * See the file LICENSE.txt for copying permission
  */
 public class SettingsFragment extends Fragment {
     private ViewGroup keypadPanel;
@@ -28,7 +30,7 @@ public class SettingsFragment extends Fragment {
     private EditText mDelayTimeSeconds;
     private EditText mRestTimeMinutes;
     private EditText mRestTimeSeconds;
-    private EditText[] mArrayTimeView;
+    private ArrayList<DigitsInput<EditText>> mListDigitsInput;
     private int[] keypadButtons = {
             R.id.button_0, R.id.button_1, R.id.button_2,
             R.id.button_3, R.id.button_4, R.id.button_5,
@@ -36,19 +38,11 @@ public class SettingsFragment extends Fragment {
             R.id.button_9
     };
 
-    private boolean firstDigitHasValue = false;
-
-    private int delayStartTime = 0;
-    private int delayTimeSeconds = 0;
-    private int delayTimeMinutes = 0;
-    private int restTimeSeconds = 0;
-    private int restTimeMinutes = 0;
-
-
-    //Timer color
+    // Timer color
     private final int timerActiveColor = R.color.LightBlue_500;
     private final int timerInactiveColor = R.color.Black_opacity_38;
 
+    // Display digit format as 00
     final String FORMAT = "%02d";
 
     /**
@@ -73,18 +67,25 @@ public class SettingsFragment extends Fragment {
         mDelayTimeSeconds = (EditText) view.findViewById(R.id.delay_time_s_edit);
         mDelayTimeSeconds.setOnClickListener(delayTimerSecondsListener);
 
-        //Rest timer
+        // Rest timer
         mRestTimeMinutes = (EditText) view.findViewById(R.id.rest_time_m_edit);
         mRestTimeMinutes.setOnClickListener(restTimerMinutesListener);
         mRestTimeSeconds = (EditText) view.findViewById(R.id.rest_time_s_edit);
         mRestTimeSeconds.setOnClickListener(restTimerSecondsListener);
 
-        mArrayTimeView = new EditText[5];
-        mArrayTimeView[0] = mDelayStartTime;
-        mArrayTimeView[1] = mDelayTimeMinutes;
-        mArrayTimeView[2] = mDelayTimeSeconds;
-        mArrayTimeView[3] = mRestTimeMinutes;
-        mArrayTimeView[4] = mRestTimeSeconds;
+        // Initialize digit objects
+        DigitsInput<EditText> diDelayStartTime = new DigitsInput<>(mDelayStartTime, 0);
+        DigitsInput<EditText> diDelayTimeMinutes = new DigitsInput<>(mDelayTimeMinutes, 0);
+        DigitsInput<EditText> diDelayTimeSeconds = new DigitsInput<>(mDelayTimeSeconds, 0);
+        DigitsInput<EditText> diRestTimeMinutes = new DigitsInput<>(mRestTimeMinutes, 0);
+        DigitsInput<EditText> diRestTimeSeconds = new DigitsInput<>(mRestTimeSeconds, 0);
+
+        mListDigitsInput = new ArrayList<>();
+        mListDigitsInput.add(diDelayStartTime);
+        mListDigitsInput.add(diDelayTimeMinutes);
+        mListDigitsInput.add(diDelayTimeSeconds);
+        mListDigitsInput.add(diRestTimeMinutes);
+        mListDigitsInput.add(diRestTimeSeconds);
     }
 
     @Override
@@ -101,18 +102,36 @@ public class SettingsFragment extends Fragment {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
 
+        if (savedInstanceState != null) {
+            //delayStartTime = savedInstanceState.getInt("DELAY_START_TIME");
+        }
+
         configureTimerViews(view);
 
         return view;
+    }
+
+    /**
+     * Save instance state
+     */
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        //savedInstanceState.putInt("DELAY_START_TIME", delayStartTime);
+
+    }
+
+    /**
+     * Pause activity
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     View.OnClickListener delayStartTimerListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             if (keypadPanel.getVisibility() == View.GONE) {
-                // To be coded
-                // SetColor when selected
-                // Set selected true and false for the other edittext
                 animSlidePanelUp(keypadPanel);
             }
 
@@ -169,6 +188,7 @@ public class SettingsFragment extends Fragment {
         }
     };
 
+
     /**
      * Keypad listener whether minutes or seconds is selected,
      * and take in user inputted time and display it
@@ -179,9 +199,10 @@ public class SettingsFragment extends Fragment {
             int selectedButton = v.getId();
             for (int digit = 0; digit < keypadButtons.length; ++digit) {
                 if (selectedButton == keypadButtons[digit]) {
-                    for (EditText currentView: mArrayTimeView) {
-                        if (currentView.isSelected()) {
-                            keypadTimerSet(currentView, digit);
+                    for (DigitsInput<EditText> currentView: mListDigitsInput) {
+                        if (currentView.getT().isSelected()) {
+                            currentView.setDigits(digit);
+                            setTimerText(currentView.getT(), currentView.getDigits());
                             break;
                         }
                     }
@@ -192,30 +213,6 @@ public class SettingsFragment extends Fragment {
         }
     };
 
-    public void keypadTimerSet(EditText selectedTimerView, int digit) {
-        if (!firstDigitHasValue) {
-            setTimerClock(selectedTimerView, true, digit);
-        } else {
-            setTimerClock(selectedTimerView, false, digit);
-        }
-    }
-
-    /**
-     * Algorithm for user inputted digits,
-     * and save the total time
-     */
-    public void setTimerClock(EditText selectedTimerView, boolean firstDigitEntered, int input) {
-        if (firstDigitEntered) {
-            firstDigitHasValue = true;
-            setFirstDigit(selectedTimerView, input);
-        } else {
-            firstDigitHasValue = false;
-            setFinalValue(selectedTimerView, input);
-        }
-
-        setTimerText(selectedTimerView, getFinalValue(selectedTimerView));
-    }
-
     /**
      * Timer text update
      */
@@ -224,100 +221,17 @@ public class SettingsFragment extends Fragment {
     }
 
     /**
-     * User entered the first digit
-     */
-    public void setFirstDigit(EditText selectedTimerView, int value) {
-        setValue(selectedTimerView, value);
-
-    }
-
-    /**
-     * User entered the second digit
-     */
-    public void setFinalValue(EditText selectedTimerView, int value) {
-        setValue(selectedTimerView, checkValidValue(
-                concatenateDigits(getFinalValue(selectedTimerView), value)));
-    }
-
-    /**
-     * Set value to correct view
-     */
-    public void setValue(EditText selectedTimerView, int value) {
-        if (selectedTimerView == mDelayStartTime) {
-            delayStartTime = value;
-        } else if (selectedTimerView == mDelayTimeMinutes) {
-            delayTimeMinutes = value;
-        } else if (selectedTimerView == mDelayTimeSeconds) {
-            delayTimeSeconds = value;
-        } else if (selectedTimerView == mRestTimeMinutes) {
-            restTimeMinutes = value;
-        } else if (selectedTimerView == mRestTimeSeconds) {
-            restTimeSeconds = value;
-        }
-    }
-
-    /**
-     * Return final user entered time value
-     */
-    public int getFinalValue(EditText selectedTimerView) {
-        if (selectedTimerView == mDelayStartTime) {
-            return delayStartTime;
-        } else if (selectedTimerView == mDelayTimeMinutes) {
-            return delayTimeMinutes;
-        } else if (selectedTimerView == mDelayTimeSeconds) {
-            return delayTimeSeconds;
-        } else if (selectedTimerView == mRestTimeMinutes) {
-            return restTimeMinutes;
-        } else if (selectedTimerView == mRestTimeSeconds) {
-            return restTimeSeconds;
-        }
-
-        return 0;
-    }
-
-    /**
-     * Concatenate the first digit with the second digit
-     */
-    public int concatenateDigits(int second, int first) {
-        return (second * 10) + first;
-    }
-
-    /**
-     * Check if user inputted value is less than 60
-     */
-    public int checkValidValue(int userInput) {
-        if (userInput < 60) {
-            return userInput;
-        } else {
-            return 59;
-        }
-    }
-
-    /**
-     * Return the selected timer view
-     */
-    public EditText getSelectedView(EditText selectedTimerView) {
-        for (EditText currentView: mArrayTimeView) {
-            if (currentView.isSelected()) {
-                return currentView;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Set selected view and color,
      * and deselect the other
      */
     public void selectTimerTextView(EditText selectView) {
-        for (EditText currentView: mArrayTimeView) {
-            if (selectView == currentView) {
+        for (DigitsInput<EditText> currentView: mListDigitsInput) {
+            if (selectView == currentView.getT()) {
                 selectView.setSelected(true);
                 selectView.setTextColor(getColor(getContext(), timerActiveColor));
             } else {
-                currentView.setSelected(false);
-                currentView.setTextColor(getColor(getContext(), timerInactiveColor));
+                currentView.getT().setSelected(false);
+                currentView.getT().setTextColor(getColor(getContext(), timerInactiveColor));
             }
         }
     }
