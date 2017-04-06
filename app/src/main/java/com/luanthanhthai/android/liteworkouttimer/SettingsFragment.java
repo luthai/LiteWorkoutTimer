@@ -74,18 +74,18 @@ public class SettingsFragment extends Fragment {
         mRestTimeSeconds.setOnClickListener(restTimerSecondsListener);
 
         // Initialize digit objects
-        DigitsInput<EditText> diDelayStartTime = new DigitsInput<>(mDelayStartTime, 0);
-        DigitsInput<EditText> diDelayTimeMinutes = new DigitsInput<>(mDelayTimeMinutes, 0);
-        DigitsInput<EditText> diDelayTimeSeconds = new DigitsInput<>(mDelayTimeSeconds, 0);
-        DigitsInput<EditText> diRestTimeMinutes = new DigitsInput<>(mRestTimeMinutes, 0);
-        DigitsInput<EditText> diRestTimeSeconds = new DigitsInput<>(mRestTimeSeconds, 0);
+        DigitsInput<EditText> delay = new DigitsInput<>(mDelayStartTime, 0);
+        DigitsInput<EditText> delayminutes = new DigitsInput<>(mDelayTimeMinutes, 0);
+        DigitsInput<EditText> delayseconds = new DigitsInput<>(mDelayTimeSeconds, 0);
+        DigitsInput<EditText> restminutes = new DigitsInput<>(mRestTimeMinutes, 0);
+        DigitsInput<EditText> restseconds = new DigitsInput<>(mRestTimeSeconds, 0);
 
         mListDigitsInput = new ArrayList<>();
-        mListDigitsInput.add(diDelayStartTime);
-        mListDigitsInput.add(diDelayTimeMinutes);
-        mListDigitsInput.add(diDelayTimeSeconds);
-        mListDigitsInput.add(diRestTimeMinutes);
-        mListDigitsInput.add(diRestTimeSeconds);
+        mListDigitsInput.add(delay);
+        mListDigitsInput.add(delayminutes);
+        mListDigitsInput.add(delayseconds);
+        mListDigitsInput.add(restminutes);
+        mListDigitsInput.add(restseconds);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class SettingsFragment extends Fragment {
         activity.setSupportActionBar(toolbar);
 
         if (savedInstanceState != null) {
-            //delayStartTime = savedInstanceState.getInt("DELAY_START_TIME");
+            mListDigitsInput.get(0).setDigits(savedInstanceState.getInt("DELAY_START_TIME"));
         }
 
         configureTimerViews(view);
@@ -116,8 +116,7 @@ public class SettingsFragment extends Fragment {
      */
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        //savedInstanceState.putInt("DELAY_START_TIME", delayStartTime);
-
+        savedInstanceState.putInt("DELAY_START_TIME", mListDigitsInput.get(0).getDigits());
     }
 
     /**
@@ -200,9 +199,9 @@ public class SettingsFragment extends Fragment {
             for (int digit = 0; digit < keypadButtons.length; ++digit) {
                 if (selectedButton == keypadButtons[digit]) {
                     for (DigitsInput<EditText> currentView: mListDigitsInput) {
-                        if (currentView.getT().isSelected()) {
+                        if (currentView.getView().isSelected()) {
                             currentView.setDigits(digit);
-                            setTimerText(currentView.getT(), currentView.getDigits());
+                            setTimerText(currentView.getView(), currentView.getDigits());
                             break;
                         }
                     }
@@ -226,12 +225,12 @@ public class SettingsFragment extends Fragment {
      */
     public void selectTimerTextView(EditText selectView) {
         for (DigitsInput<EditText> currentView: mListDigitsInput) {
-            if (selectView == currentView.getT()) {
+            if (selectView == currentView.getView()) {
                 selectView.setSelected(true);
                 selectView.setTextColor(getColor(getContext(), timerActiveColor));
             } else {
-                currentView.getT().setSelected(false);
-                currentView.getT().setTextColor(getColor(getContext(), timerInactiveColor));
+                currentView.getView().setSelected(false);
+                currentView.getView().setTextColor(getColor(getContext(), timerInactiveColor));
             }
         }
     }

@@ -6,33 +6,28 @@ package com.luanthanhthai.android.liteworkouttimer;
  * See the file LICENSE.txt for copying permission
  */
 
-public class DigitsInput<T> {
-    private T t;
+class DigitsInput<T> {
+    private T view;
     private int digits;
 
-    public DigitsInput() {
-        this.t = null;
-        this.digits = 0;
-    }
-
-    public DigitsInput(T t, int digits) {
-        this.t = t;
+    DigitsInput(T view, int digits) {
+        this.view = view;
         this.digits = digits;
     }
 
-    public T getT() {
-        return t;
+    public T getView() {
+        return view;
     }
 
-    public void setT(T t) {
-        this.t = t;
+    public void setView(T view) {
+        this.view = view;
     }
 
-    public int getDigits() {
+    int getDigits() {
         return digits;
     }
 
-    public void setDigits(int digits) {
+    void setDigits(int digits) {
         if (!checkFirstDigitZero(this.digits)) {
             this.digits = digits;
         } else {
@@ -43,21 +38,21 @@ public class DigitsInput<T> {
     /**
      * Check if time is less then 10
      */
-    public boolean checkFirstDigitZero(int time) {
+    private boolean checkFirstDigitZero(int time) {
         return time < 10;
     }
 
     /**
      * Concatenate the first digit with the second digit
      */
-    public int concatenateDigits(int second, int first) {
+    private int concatenateDigits(int second, int first) {
         return (second * 10) + first;
     }
 
     /**
      * Check if user inputted value is less than 60
      */
-    public int checkValidValue(int userInput) {
+    private int checkValidValue(int userInput) {
         if (userInput < 60) {
             return userInput;
         } else {

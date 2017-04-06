@@ -26,9 +26,11 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -48,6 +50,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     private ViewGroup timerClockView;
     private ViewGroup keypadPanel;
     private ViewGroup pauseBarPanel;
+    private ArrayList<DigitsInput<TextView>> mListTimerView;
     private int[] keypadButtons = {
                 R.id.button_0, R.id.button_1, R.id.button_2,
                 R.id.button_3, R.id.button_4, R.id.button_5,
@@ -59,13 +62,10 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     private final long countDownInterval = 250;
     private long totalMillis = 0;
     private long pausedMillis = 0;
-    private int finalMinutesValue = 0;
-    private int finalSecondsValue = 0;
     private final int timerInactiveColor = R.color.Black_opacity_87;
     private final int delayColor = R.color.Black_opacity_54;
     private final int timerActiveColor = R.color.LightBlue_500;
 
-    private boolean firstDigitHasValue = false;
     private boolean enableRepeat;
     private boolean enableDelay;
     private boolean enableSound;
@@ -143,6 +143,14 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         ImageButton soundButton = (ImageButton) view.findViewById(R.id.timer_sound);
         soundButton.setOnClickListener(soundButtonListener);
         soundButton.setSelected(enableSound);
+
+        // Initialize digital input objects
+        DigitsInput<TextView> minutes = new DigitsInput<>(mMinutesView, 0);
+        DigitsInput<TextView> seconds = new DigitsInput<>(mSecondsView, 0);
+
+        mListTimerView = new ArrayList<>();
+        mListTimerView.add(minutes);
+        mListTimerView.add(seconds);
     }
 
     @Override
@@ -154,19 +162,28 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
 
+        configureTimerViews(view);
+
+
+
         enableDelay = true;
         if (savedInstanceState != null) {
             enableRepeat = savedInstanceState.getBoolean("REPEAT_STATE");
             enableSound = savedInstanceState.getBoolean("SOUND_STATE");
-            finalMinutesValue = savedInstanceState.getInt("MINUTES_TIME");
-            finalSecondsValue = savedInstanceState.getInt("SECONDS_TIME");
+            mListTimerView.get(0).setDigits(savedInstanceState.getInt("MINUTES_TIME"));
+            mListTimerView.get(1).setDigits(savedInstanceState.getInt("SECONDS_TIME"));
         }
 
-        configureTimerViews(view);
 
-        setTimerText(mMinutesView, finalMinutesValue);
-        setTimerText(mSecondsView, finalSecondsValue);
-        disableStartButton();
+
+        setTimerText(mMinutesView, mListTimerView.get(0).getDigits());
+        setTimerText(mSecondsView, mListTimerView.get(1).getDigits());
+        setStartButtonStatus();
+
+        if (mListTimerView.get(0).getDigits() == 0 && mListTimerView.get(1).getDigits() == 0) {
+            mStartButton.setClickable(false);
+            mStartButton.setBackgroundColor(getColor(getContext(), R.color.Black_opacity_38));
+        }
 
         // For backwards compatibility set this
         // near the end
@@ -182,8 +199,8 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putBoolean("REPEAT_STATE", enableRepeat);
         savedInstanceState.putBoolean("SOUND_STATE", enableSound);
-        savedInstanceState.putInt("MINUTES_TIME", finalMinutesValue);
-        savedInstanceState.putInt("SECONDS_TIME", finalSecondsValue);
+        savedInstanceState.putInt("MINUTES_TIME", mListTimerView.get(0).getDigits());
+        savedInstanceState.putInt("SECONDS_TIME", mListTimerView.get(1).getDigits());
 
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -203,7 +220,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     /**
      * Initialize y coordinates for sliding animation
      */
-    class MyGlobalListenerClass implements ViewTreeObserver.OnGlobalLayoutListener {
+    private class MyGlobalListenerClass implements ViewTreeObserver.OnGlobalLayoutListener {
         @Override
         public void onGlobalLayout() {
             // Remove the ViewTree
@@ -252,7 +269,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
      * Timer class with onFinish algorithm,
      * for running the timer accordingly when finished
      */
-    public class MyTimer extends CountDownTimer {
+    private class MyTimer extends CountDownTimer {
         private MyTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
@@ -400,27 +417,24 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             if (mMinutesView.isSelected()) {
-                backspaceCondition(mMinutesView);
-            } else if (mSecondsView.isSelected()) {
-                backspaceCondition(mSecondsView);
+                if (mListTimerView.get(0).getDigits() < 10) {
+                    mListTimerView.get(0).setDigits(0);
+                } else {
+                    mListTimerView.get(0).setDigits(mListTimerView.get(0).getDigits() / 10);
+                }
+
+                setTimerText(mMinutesView, mListTimerView.get(0).getDigits());
+            } else {
+                if (mListTimerView.get(1).getDigits() < 10) {
+                    mListTimerView.get(1).setDigits(0);
+                } else {
+                    mListTimerView.get(1).setDigits(mListTimerView.get(1).getDigits() / 10);
+                }
+
+                setTimerText(mSecondsView, mListTimerView.get(1).getDigits());
             }
         }
     };
-
-    /**
-     * Algorithm for backspace button
-     */
-    public void backspaceCondition(TextView selectedTextView) {
-        if (getFinalValue(selectedTextView) < 10) {
-            setFirstDigit(selectedTextView, 0);
-            firstDigitHasValue = false;
-        } else {
-            setFirstDigit(selectedTextView, getFinalValue(selectedTextView) / 10);
-            firstDigitHasValue = true;
-        }
-
-        setTimerText(selectedTextView, getFinalValue(selectedTextView));
-    }
 
     /**
      * Keypad listener whether minutes or seconds is selected,
@@ -433,9 +447,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             for (int digit = 0; digit < keypadButtons.length; ++digit) {
                 if (selectedButton == keypadButtons[digit]) {
                     if (mMinutesView.isSelected()) {
-                        keypadTimerSet(mMinutesView, digit);
-                    } else if (mSecondsView.isSelected()) {
-                        keypadTimerSet(mSecondsView, digit);
+                        setTimerClock(mMinutesView, digit);
+                    } else {
+                        setTimerClock(mSecondsView, digit);
                     }
 
                     return;
@@ -444,90 +458,21 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         }
     };
 
-    public void keypadTimerSet(TextView selectedTimerView, int digit) {
-        if (!firstDigitHasValue) {
-            setTimerClock(selectedTimerView, true, digit);
-        } else {
-            setTimerClock(selectedTimerView, false, digit);
-        }
-    }
-
     /**
      * Algorithm for user inputted digits,
      * and save the total time
      */
-    public void setTimerClock(TextView selectedTimerView, boolean firstDigitEntered, int input) {
-        if (firstDigitEntered) {
-            firstDigitHasValue = true;
-            setFirstDigit(selectedTimerView, input);
+    public void setTimerClock(TextView selectedView, int digit) {
+        if (mMinutesView == selectedView) {
+            mListTimerView.get(0).setDigits(digit);
+            setTimerText(mMinutesView, mListTimerView.get(0).getDigits());
         } else {
-            firstDigitHasValue = false;
-            setFinalValue(selectedTimerView, input);
-
-            if (selectedTimerView == mMinutesView) {
-                selectTimerTextView(mSecondsView, mMinutesView);
-            }
+            mListTimerView.get(1).setDigits(digit);
+            setTimerText(mSecondsView, mListTimerView.get(1).getDigits());
         }
 
-        totalMillis = clockTimeToMillis(finalMinutesValue, finalSecondsValue);
-        setTimerText(selectedTimerView, getFinalValue(selectedTimerView));
-    }
-
-    /**
-     * User entered the first digit
-     */
-    public void setFirstDigit(TextView selectedTimerView, int value) {
-        if (selectedTimerView == mMinutesView) {
-            finalMinutesValue = value;
-        } else {
-            finalSecondsValue = value;
-        }
-
-        disableStartButton();
-    }
-
-    /**
-     * User entered the second digit
-     */
-    public void setFinalValue(TextView selectedTimerView, int value) {
-        if (selectedTimerView == mMinutesView) {
-            finalMinutesValue = checkValidValue(
-                    concatenateDigits(finalMinutesValue, value));
-        } else {
-            finalSecondsValue = checkValidValue(
-                    concatenateDigits(finalSecondsValue, value));
-        }
-
-        disableStartButton();
-    }
-
-    /**
-     * Return final user entered time value
-     */
-    public int getFinalValue(TextView selectedTimerView) {
-        if (selectedTimerView == mMinutesView) {
-            return finalMinutesValue;
-        } else {
-            return finalSecondsValue;
-        }
-    }
-
-    /**
-     * Concatenate the first digit with the second digit
-     */
-    public int concatenateDigits(int second, int first) {
-        return (second * 10) + first;
-    }
-
-    /**
-     * Check if user inputted value is less than 60
-     */
-    public int checkValidValue(int userInput) {
-        if (userInput < 60) {
-            return userInput;
-        } else {
-            return 59;
-        }
+        totalMillis = clockTimeToMillis(mListTimerView.get(0).getDigits(), mListTimerView.get(1).getDigits());
+        setStartButtonStatus();
     }
 
     /**
@@ -539,7 +484,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
             TextView selectedView = (TextView) v;
             if (selectedView == mMinutesView) {
                 selectTimerTextView(mMinutesView, mSecondsView);
-            } else if (selectedView == mSecondsView) {
+            } else {
                 selectTimerTextView(mSecondsView, mMinutesView);
             }
         }
@@ -554,7 +499,6 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         deselectView.setSelected(false);
         selectView.setTextColor(getColor(getContext(), timerActiveColor));
         deselectView.setTextColor(getColor(getContext(), timerInactiveColor));
-        firstDigitHasValue = false;
     }
 
     /**
@@ -610,8 +554,8 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
      * Disable/enable start button,
      * when timer condition is met
      */
-    public void disableStartButton() {
-        if (finalMinutesValue == 0 && finalSecondsValue == 0) {
+    public void setStartButtonStatus() {
+        if (mListTimerView.get(0).getDigits() == 0 && mListTimerView.get(1).getDigits() == 0) {
             mStartButton.setClickable(false);
             mStartButton.setBackgroundColor(getColor(getContext(), R.color.Black_opacity_38));
         } else {
@@ -693,8 +637,8 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         mPauseButton.setVisibility(View.VISIBLE);
 
         userInputTimer.cancel();
-        setTimerText(mMinutesView, finalMinutesValue);
-        setTimerText(mSecondsView, finalSecondsValue);
+        setTimerText(mMinutesView, mListTimerView.get(0).getDigits());
+        setTimerText(mSecondsView, mListTimerView.get(1).getDigits());
         switchTimeColor(timerInactiveColor);
         enableClickableTimer();
 
