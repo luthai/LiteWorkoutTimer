@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ import java.util.Locale;
  */
 public class SettingsFragment extends Fragment {
     private ViewGroup keypadPanel;
+    private SwitchCompat mAudioSwitch;
+    private SwitchCompat mRepeatSwitch;
     private EditText mDelayStartTime;
     private EditText mDelayTimeMinutes;
     private EditText mDelayTimeSeconds;
@@ -42,6 +46,10 @@ public class SettingsFragment extends Fragment {
     private final int timerActiveColor = R.color.LightBlue_500;
     private final int timerInactiveColor = R.color.Black_opacity_38;
 
+    // Switch status
+    private boolean audioStatus;
+    private boolean repeatStatus;
+
     // Display digit format as 00
     final String FORMAT = "%02d";
 
@@ -56,6 +64,24 @@ public class SettingsFragment extends Fragment {
             Button keypadButtonId = (Button) view.findViewById(keypadId);
             keypadButtonId.setOnClickListener(keypadListener);
         }
+
+        // Audio switch
+        mAudioSwitch = (SwitchCompat) view.findViewById(R.id.audio_switch);
+        mAudioSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                audioStatus = b;
+            }
+        });
+
+        // Repeat switch
+        mRepeatSwitch = (SwitchCompat) view.findViewById(R.id.repeat_switch);
+        mRepeatSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                repeatStatus = b;
+            }
+        });
 
         // Delay start timer
         mDelayStartTime = (EditText) view.findViewById(R.id.delay_start_time_edit);
@@ -102,8 +128,10 @@ public class SettingsFragment extends Fragment {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
 
+        // Load instance state
         if (savedInstanceState != null) {
-            mListDigitsInput.get(0).setDigits(savedInstanceState.getInt("DELAY_START_TIME"));
+            repeatStatus = savedInstanceState.getBoolean("REPEAT_STATE");
+            audioStatus = savedInstanceState.getBoolean("AUDIO_STATE");
         }
 
         configureTimerViews(view);
@@ -116,7 +144,8 @@ public class SettingsFragment extends Fragment {
      */
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putInt("DELAY_START_TIME", mListDigitsInput.get(0).getDigits());
+        savedInstanceState.putBoolean("REPEAT_STATE", repeatStatus);
+        savedInstanceState.putBoolean("AUDIO_STATE", audioStatus);
     }
 
     /**
@@ -186,7 +215,6 @@ public class SettingsFragment extends Fragment {
             selectTimerTextView(selectedView);
         }
     };
-
 
     /**
      * Keypad listener whether minutes or seconds is selected,

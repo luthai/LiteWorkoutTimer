@@ -43,6 +43,8 @@
 
     // Settings
     <string name="settings">Settings</string>
+    <string name="audio">Audio</string>
+    <string name="repeat">Repeat</string>
     <string name="delay_start_time">Delay start time</string>
     <string name="delay_time">Delay time</string>
     <string name="rest_time">Rest time</string>

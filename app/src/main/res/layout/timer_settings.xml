@@ -24,6 +24,50 @@
         android:layout_marginBottom="@dimen/text_view_margin_bottom">
 
         <TextView
+            android:id="@+id/audio_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_view_size"
+            android:text="@string/audio"/>
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/audio_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/audio_text"
+            android:layout_alignRight="@id/audio_text"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/text_view_margin_bottom">
+
+        <TextView
+            android:id="@+id/repeat_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_view_size"
+            android:text="@string/repeat"/>
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/repeat_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/repeat_text"
+            android:layout_alignRight="@id/repeat_text"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/text_view_margin_bottom">
+
+        <TextView
             android:id="@+id/delay_start_time_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

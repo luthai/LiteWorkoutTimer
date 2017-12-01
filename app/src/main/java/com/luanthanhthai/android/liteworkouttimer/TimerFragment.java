@@ -26,7 +26,6 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -66,9 +65,9 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
     private final int delayColor = R.color.Black_opacity_54;
     private final int timerActiveColor = R.color.LightBlue_500;
 
-    private boolean enableRepeat;
-    private boolean enableDelay;
-    private boolean enableSound;
+    private boolean repeatStatus;
+    private boolean delayStatus;
+    private boolean audioStatus;
     private boolean isDelayRunning = false;
     private boolean isStartPressed = false;
     private boolean timerIsRunning = false;
@@ -137,12 +136,12 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         // Repeat icon
         ImageButton repeatButton = (ImageButton) view.findViewById(R.id.timer_repeat);
         repeatButton.setOnClickListener(repeatButtonListener);
-        repeatButton.setSelected(enableRepeat);
+        repeatButton.setSelected(repeatStatus);
 
         // Sound icon
         ImageButton soundButton = (ImageButton) view.findViewById(R.id.timer_sound);
         soundButton.setOnClickListener(soundButtonListener);
-        soundButton.setSelected(enableSound);
+        soundButton.setSelected(audioStatus);
 
         // Initialize digital input objects
         DigitsInput<TextView> minutes = new DigitsInput<>(mMinutesView, 0);
@@ -165,11 +164,11 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         configureTimerViews(view);
 
 
-
-        enableDelay = true;
+        // Load instance state
+        delayStatus = true;
         if (savedInstanceState != null) {
-            enableRepeat = savedInstanceState.getBoolean("REPEAT_STATE");
-            enableSound = savedInstanceState.getBoolean("SOUND_STATE");
+            repeatStatus = savedInstanceState.getBoolean("REPEAT_STATE");
+            audioStatus = savedInstanceState.getBoolean("AUDIO_STATE");
             mListTimerView.get(0).setDigits(savedInstanceState.getInt("MINUTES_TIME"));
             mListTimerView.get(1).setDigits(savedInstanceState.getInt("SECONDS_TIME"));
         }
@@ -197,8 +196,8 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
      */
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putBoolean("REPEAT_STATE", enableRepeat);
-        savedInstanceState.putBoolean("SOUND_STATE", enableSound);
+        savedInstanceState.putBoolean("REPEAT_STATE", repeatStatus);
+        savedInstanceState.putBoolean("AUDIO_STATE", audioStatus);
         savedInstanceState.putInt("MINUTES_TIME", mListTimerView.get(0).getDigits());
         savedInstanceState.putInt("SECONDS_TIME", mListTimerView.get(1).getDigits());
 
@@ -304,7 +303,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onFinish() {
             if (isStartPressed) {
-                if (enableRepeat) {
+                if (repeatStatus) {
                     if (isDelayRunning) {
                         isDelayRunning = false;
                         setTimer(totalMillis);
@@ -353,7 +352,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
      */
     public void runTimer() {
         if (isStartPressed) {
-            if (enableDelay) {
+            if (delayStatus) {
                 isDelayRunning = true;
                 userInputTimer = new MyTimer(timerDelayMillis, countDownInterval);
                 switchTimeColor(delayColor);
@@ -394,7 +393,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             v.setSelected(!v.isSelected());
-            enableRepeat = v.isSelected();
+            repeatStatus = v.isSelected();
         }
     };
 
@@ -405,7 +404,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             v.setSelected(!v.isSelected());
-            enableSound = v.isSelected();
+            audioStatus = v.isSelected();
         }
     };
 
@@ -526,7 +525,7 @@ public class TimerFragment extends Fragment implements View.OnClickListener {
      * Sound beep
      */
     public void countDownBeep(int duration) {
-        if (enableSound) {
+        if (audioStatus) {
             ToneGenerator tg  = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
             tg.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, duration);
         }
