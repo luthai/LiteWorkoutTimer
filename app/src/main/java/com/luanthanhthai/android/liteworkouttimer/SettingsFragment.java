@@ -263,6 +263,7 @@ public class SettingsFragment extends Fragment {
         }
     }
 
+    //Deprecated, need to check code
     public static int getColor(Context context, int id) {
         final int version = Build.VERSION.SDK_INT;
         if (version >= Build.VERSION_CODES.M) {
